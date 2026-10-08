@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+<defs><linearGradient id="bgItem" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ecd2b0"/><stop offset="1" stop-color="#c9966a"/></linearGradient></defs>
+
+<rect width="1200" height="900" fill="url(#bgItem)"/>
+<circle cx="600" cy="450" r="360" fill="#ffffff" opacity=".24"/><circle cx="600" cy="450" r="270" fill="#ffffff" opacity=".18"/>
+<g opacity=".5"><circle cx="80" cy="60" r="14" fill="#ffffff" opacity=".35"/><circle cx="277" cy="191" r="23" fill="#ffffff" opacity=".35"/><circle cx="474" cy="322" r="32" fill="#ffffff" opacity=".35"/><circle cx="671" cy="453" r="14" fill="#ffffff" opacity=".35"/><circle cx="868" cy="584" r="23" fill="#ffffff" opacity=".35"/><circle cx="1065" cy="715" r="32" fill="#ffffff" opacity=".35"/><circle cx="62" cy="846" r="14" fill="#ffffff" opacity=".35"/><circle cx="259" cy="77" r="23" fill="#ffffff" opacity=".35"/><circle cx="456" cy="208" r="32" fill="#ffffff" opacity=".35"/></g>
+<g transform="translate(600 480) scale(1)">
+<ellipse cx="0" cy="232" rx="190" ry="22.8" fill="#3d251933"/>
+<clipPath id="glassClip"><path d="M-130 -240 h260 l-24 460 q-4 22 -30 22 h-152 q-26 0 -30 -22Z"/></clipPath>
+<g transform="rotate(8 0 -240)"><rect x="-8" y="-380" width="20" height="360" rx="8" fill="#c8643c"/></g>
+<g clip-path="url(#glassClip)"><rect x="-130" y="-240" width="260" height="94.4" fill="#4a2a18"/><rect x="-130" y="-147.6" width="260" height="191" fill="#f3e6d2"/><rect x="-130" y="41.400000000000006" width="260" height="140.6" fill="#8a4b24"/><rect x="-108" y="-188" width="76" height="76" rx="14" fill="#ffffff55" stroke="#ffffffaa" stroke-width="4" transform="rotate(-12 -70 -150)"/><rect x="-28" y="-228" width="76" height="76" rx="14" fill="#ffffff55" stroke="#ffffffaa" stroke-width="4" transform="rotate(14 10 -190)"/><rect x="22" y="-158" width="76" height="76" rx="14" fill="#ffffff55" stroke="#ffffffaa" stroke-width="4" transform="rotate(-18 60 -120)"/><rect x="-68" y="-98" width="76" height="76" rx="14" fill="#ffffff55" stroke="#ffffffaa" stroke-width="4" transform="rotate(20 -30 -60)"/><rect x="12" y="-58" width="76" height="76" rx="14" fill="#ffffff55" stroke="#ffffffaa" stroke-width="4" transform="rotate(-8 50 -20)"/><rect x="-118" y="-8" width="76" height="76" rx="14" fill="#ffffff55" stroke="#ffffffaa" stroke-width="4" transform="rotate(12 -80 30)"/><rect x="-18" y="32" width="76" height="76" rx="14" fill="#ffffff55" stroke="#ffffffaa" stroke-width="4" transform="rotate(-14 20 70)"/><rect x="-130" y="-240" width="40" height="480" fill="#ffffff2e"/></g>
+<path d="M-130 -240 h260 l-24 460 q-4 22 -30 22 h-152 q-26 0 -30 -22Z" fill="#ffffff10" stroke="#ffffffaa" stroke-width="7"/>
+<ellipse cx="0" cy="-240" rx="130" ry="20" fill="none" stroke="#ffffffcc" stroke-width="6"/>
+
+</g>
+</svg>

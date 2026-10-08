@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+<defs><linearGradient id="bgItem" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f9e6bd"/><stop offset="1" stop-color="#e8b466"/></linearGradient></defs>
+
+<rect width="1200" height="900" fill="url(#bgItem)"/>
+<circle cx="600" cy="450" r="360" fill="#ffffff" opacity=".24"/><circle cx="600" cy="450" r="270" fill="#ffffff" opacity=".18"/>
+<g opacity=".5"><circle cx="80" cy="60" r="14" fill="#ffffff" opacity=".35"/><circle cx="277" cy="191" r="23" fill="#ffffff" opacity=".35"/><circle cx="474" cy="322" r="32" fill="#ffffff" opacity=".35"/><circle cx="671" cy="453" r="14" fill="#ffffff" opacity=".35"/><circle cx="868" cy="584" r="23" fill="#ffffff" opacity=".35"/><circle cx="1065" cy="715" r="32" fill="#ffffff" opacity=".35"/><circle cx="62" cy="846" r="14" fill="#ffffff" opacity=".35"/><circle cx="259" cy="77" r="23" fill="#ffffff" opacity=".35"/><circle cx="456" cy="208" r="32" fill="#ffffff" opacity=".35"/></g>
+<ellipse cx="600" cy="792" rx="400" ry="48" fill="#3d251933"/><ellipse cx="600" cy="640" rx="380" ry="136.79999999999998" fill="#fff8ec"/><ellipse cx="600" cy="636" rx="296.40000000000003" ry="102.60000000000001" fill="#00000010"/><ellipse cx="600" cy="634" rx="304" ry="106.4" fill="#f7ecd9"/>
+<g transform="translate(600 480)">
+<path d="M-250 80 q-30 -90 70 -120 q60 -10 90 40 q10 80 -70 110 q-50 20 -90 -30Z" fill="#c98a42"/>
+<path d="M250 80 q30 -90 -70 -120 q-60 -10 -90 40 q-10 80 70 110 q50 20 90 -30Z" fill="#c98a42"/>
+<path d="M-170 -10 q40 -120 170 -120 q130 0 170 120 q-20 100 -170 100 q-150 0 -170 -100Z" fill="#dba04e"/>
+<path d="M-120 -40 q30 -70 120 -80 q90 10 120 80 q-40 60 -120 60 q-80 0 -120 -60Z" fill="#e8b56a"/>
+<path d="M-150 -110 q-20 100 -45 190" fill="none" stroke="#b9772f" stroke-width="12" stroke-linecap="round" opacity=".7"/><path d="M-75 -110 q-20 100 -22.5 190" fill="none" stroke="#b9772f" stroke-width="12" stroke-linecap="round" opacity=".7"/><path d="M0 -110 q-20 100 0 190" fill="none" stroke="#b9772f" stroke-width="12" stroke-linecap="round" opacity=".7"/><path d="M75 -110 q20 100 22.5 190" fill="none" stroke="#b9772f" stroke-width="12" stroke-linecap="round" opacity=".7"/><path d="M150 -110 q20 100 45 190" fill="none" stroke="#b9772f" stroke-width="12" stroke-linecap="round" opacity=".7"/>
+<path d="M-120 -80 q60 -50 130 -34" fill="none" stroke="#fbe0a8" stroke-width="12" stroke-linecap="round" opacity=".7"/></g>
+</svg>
