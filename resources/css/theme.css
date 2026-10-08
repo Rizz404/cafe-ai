@@ -1,0 +1,49 @@
+/*
+ * Cafe AI theme: the single source of visual values for the admin and the
+ * shared UI kit (resources/views/components/ui). Add new tokens here; never
+ * introduce colors in those views, in resources/js/ui, or in other
+ * stylesheets (npm run lint:ui checks it).
+ *
+ * The guest-facing stage (presentation.css and the cafe-stage views) is an
+ * illustrated scene with its own art direction and is exempt.
+ */
+
+@theme {
+    --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+
+    /* Brand: dark roast on warm milk. */
+    --color-primary: #451a03;
+    --color-primary-hover: #78350f;
+    --color-canvas: #fffbeb99;
+    --color-surface: #ffffff;
+    --color-surface-muted: #fafaf9;
+    --color-surface-hover: #fffbeb80;
+    --color-text: #1c1917;
+    --color-muted: #78716c;
+    --color-subtle: #a8a29e;
+    --color-border: #e7e5e4;
+    --color-border-strong: #d6d3d1;
+
+    --color-success: #047857;
+    --color-success-soft: #ecfdf5;
+    --color-success-border: #a7f3d0;
+    --color-warning: #92400e;
+    --color-warning-soft: #fef3c7;
+    --color-warning-border: #fcd34d;
+    --color-danger: #b91c1c;
+    --color-danger-hover: #991b1b;
+    --color-danger-soft: #fef2f2;
+    --color-danger-border: #fecaca;
+
+    --color-overlay: rgb(28 25 23 / 0.5);
+
+    --radius-control: 0.5rem;
+    --radius-card: 0.75rem;
+}
+
+@theme inline {
+    --color-on-primary: var(--color-surface);
+    --color-focus: var(--color-primary-hover);
+}
