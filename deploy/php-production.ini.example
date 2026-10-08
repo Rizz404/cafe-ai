@@ -1,0 +1,30 @@
+; Cafe AI — PHP 8.4 production overrides.
+; Install as e.g. /etc/php/8.4/fpm/conf.d/99-cafe-ai.ini and the same for the
+; CLI (scheduler/worker).
+
+memory_limit = 256M
+; Longer than the 85 s guest turn (config/assistant.php), shorter than the
+; nginx fastcgi_read_timeout of 100 s.
+max_execution_time = 95
+max_input_time = 60
+post_max_size = 2M
+upload_max_filesize = 2M
+
+display_errors = Off
+display_startup_errors = Off
+log_errors = On
+error_reporting = E_ALL & ~E_DEPRECATED
+expose_php = Off
+
+session.cookie_secure = 1
+session.cookie_httponly = 1
+session.cookie_samesite = Lax
+session.use_strict_mode = 1
+
+opcache.enable = 1
+opcache.memory_consumption = 192
+opcache.max_accelerated_files = 20000
+; Release directories change per deploy; reload PHP-FPM after switching.
+opcache.validate_timestamps = 0
+
+date.timezone = UTC

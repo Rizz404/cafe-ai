@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    # The suite runs on in-memory SQLite (phpunit.xml); no model provider is
+    # called, the barista tests fake the HTTP endpoint.
+    env:
+      APP_ENV: testing
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: pdo_sqlite, sqlite3, intl, mbstring
+          coverage: none
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Install PHP dependencies (from lock)
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Prepare environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate --ansi
+
+      - name: PHPUnit
+        run: composer test
+
+      - name: Pint
+        run: php vendor/bin/pint --test
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: UI conventions
+        run: npm run lint:ui
+
+      - name: Node tests
+        run: npm run test:ui
+
+      - name: Build
+        run: npm run build
+
+      - name: Composer audit
+        run: composer audit
+
+      - name: npm audit (runtime dependencies)
+        run: npm audit --omit=dev
