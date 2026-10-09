@@ -358,6 +358,7 @@ function initReservationWizard() {
 
             clearDraft();
             showDone(result.body);
+            window.cafeSound?.play('thanks');
         } catch {
             showError(labels.error_network);
         } finally {
