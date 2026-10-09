@@ -12,7 +12,7 @@
         <div class="stage-loader" data-stage-loader role="status"><span class="cafe-monogram" aria-hidden="true">C</span><p>{{ $opening['loading'] }}</p></div>
         <img src="{{ $backdrop['image'] }}" alt="" class="stage-image" fetchpriority="high">
         <div class="stage-shade"></div>
-        <img src="{{ $backdrop['character'] }}" alt="" class="stage-character" data-anchor="right">
+        <img src="{{ $backdrop['character'] }}" alt="" class="stage-character" data-anchor="left">
 
         <header class="stage-header">
             <span class="flex min-w-0 items-center gap-3">

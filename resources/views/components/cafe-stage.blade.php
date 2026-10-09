@@ -46,7 +46,7 @@
                     <a href="{{ $item['href'] }}"
                         @if($item['exit']) data-stage-exit @if($item['tour']) data-tour-line="{{ $item['tour'] }}" @endif data-topic="{{ $item['topic'] }}" @endif
                         @if($item['key'] === $scene || ($scene === 'menu-item' && $item['key'] === 'menu') || ($scene === 'seating-area' && $item['key'] === 'seating')) aria-current="page" @endif>
-                        <span>{{ $item['label'] }}</span><span class="nav-arrow" aria-hidden="true">›</span>
+                        <span class="nav-icon"><x-stage-icon :name="$item['icon']" /></span><span>{{ $item['label'] }}</span>
                     </a>
                 @endforeach
             </nav>

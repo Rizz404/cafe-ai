@@ -99,11 +99,4 @@
                 <span>{{ $labels['chat_open'] }}</span>
                 <span class="chat-launcher-arrow" aria-hidden="true">↗</span>
             </button>
-
-            {{-- Each chip walks the guest to its scene; the barista then carries on with that topic. --}}
-            <ul class="chat-chips" aria-label="{{ $labels['menu_heading_chat'] }}">
-                @foreach ($navItems as $item)
-                    <li><a href="{{ $item['href'] }}" data-stage-exit data-topic="{{ $item['topic'] }}" @if($item['tour']) data-tour-line="{{ $item['tour'] }}" @endif>{{ $item['chip'] }} <span aria-hidden="true">›</span></a></li>
-                @endforeach
-            </ul>
         </div>

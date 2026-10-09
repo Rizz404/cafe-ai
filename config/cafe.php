@@ -33,12 +33,12 @@ return [
     'avatar_image' => 'images/barista/avatar.svg',
 
     'scenes' => [
-        'home' => ['image' => 'images/scenes/counter.svg', 'character' => 'images/character/barista-greeting.svg', 'focus' => 'center 40%', 'focusMobile' => '50% 30%', 'anchor' => 'center', 'text' => 'top'],
-        'menu' => ['image' => 'images/scenes/menu.svg', 'character' => 'images/character/barista-greeting.svg', 'focus' => 'center 40%', 'focusMobile' => '50% 30%', 'anchor' => 'center', 'text' => 'top'],
-        'seating' => ['image' => 'images/scenes/seating.svg', 'character' => 'images/character/barista-greeting.svg', 'focus' => 'center 45%', 'focusMobile' => '60% 30%', 'anchor' => 'center', 'text' => 'top'],
+        'home' => ['image' => 'images/scenes/counter.svg', 'character' => 'images/character/barista-greeting.svg', 'focus' => 'center 40%', 'focusMobile' => '50% 30%', 'anchor' => 'left', 'text' => 'top'],
+        'menu' => ['image' => 'images/scenes/menu.svg', 'character' => 'images/character/barista-greeting.svg', 'focus' => 'center 40%', 'focusMobile' => '50% 30%', 'anchor' => 'left', 'text' => 'top'],
+        'seating' => ['image' => 'images/scenes/seating.svg', 'character' => 'images/character/barista-greeting.svg', 'focus' => 'center 45%', 'focusMobile' => '60% 30%', 'anchor' => 'left', 'text' => 'top'],
         'facilities' => ['image' => 'images/scenes/terrace.svg', 'character' => 'images/character/barista-greeting.svg', 'focus' => 'center 45%', 'focusMobile' => '30% 30%', 'anchor' => 'left', 'text' => 'bottom'],
-        'info' => ['image' => 'images/scenes/window.svg', 'character' => 'images/character/barista-greeting.svg', 'focus' => 'center 45%', 'focusMobile' => '70% 30%', 'anchor' => 'right', 'text' => 'bottom'],
-        'staff' => ['image' => 'images/scenes/backbar.svg', 'character' => 'images/character/barista-clasped.svg', 'focus' => 'center 40%', 'focusMobile' => '60% 30%', 'anchor' => 'center', 'text' => 'top'],
+        'info' => ['image' => 'images/scenes/window.svg', 'character' => 'images/character/barista-greeting.svg', 'focus' => 'center 45%', 'focusMobile' => '70% 30%', 'anchor' => 'left', 'text' => 'bottom'],
+        'staff' => ['image' => 'images/scenes/backbar.svg', 'character' => 'images/character/barista-clasped.svg', 'focus' => 'center 40%', 'focusMobile' => '60% 30%', 'anchor' => 'left', 'text' => 'top'],
         'reservation' => ['image' => 'images/scenes/reservation.svg', 'character' => 'images/character/barista-notepad.svg', 'focus' => 'center 45%', 'focusMobile' => '30% 30%', 'anchor' => 'left', 'text' => 'bottom'],
     ],
 
