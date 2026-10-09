@@ -159,7 +159,7 @@ config/                 cafe.php (bahasa, scene), assistant.php (anggaran AI)
 database/
   factories/            satu factory per model
   migrations/           skema (kafe, menu, tempat duduk, knowledge, percakapan, reservasi)
-  seeders/              DemoCafeSeeder
+  seeders/              satu seeder per model, dipanggil berurutan oleh DatabaseSeeder
 deploy/                 contoh nginx, PHP, supervisor, dan env produksi
 lang/{id,en,ja}/        semua teks panggung tamu, validasi reservasi, dan pesan handover
 public/images/          scenes/, character/, barista/, menu/, seating/ (ilustrasi SVG)
