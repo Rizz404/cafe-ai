@@ -33,15 +33,15 @@ Kode ada di [app/Modules/Assistant/](app/Modules/Assistant) (model, prompt, tool
 - **[ReplyToGuest](app/Modules/Conversation/Actions/ReplyToGuest.php)** menjalankan satu giliran percakapan dan menyimpan riwayatnya di database. Ia memanggil model lewat [ModelGateway](app/Modules/Assistant/Gateway/ModelGateway.php), yaitu endpoint chat yang kompatibel dengan OpenAI (LM Studio atau Ollama yang di-host sendiri), lalu menjalankan loop tool-calling (maksimal 6 putaran per giliran). Request dikirim dengan `reasoning_effort=none` agar model tidak melakukan fase berpikir panjang. Seluruh giliran dibatasi 85 detik supaya muat dalam batas 100 detik Cloudflare. Semua anggaran ini ada di [config/assistant.php](config/assistant.php). Prompt disusun oleh [PromptComposer](app/Modules/Assistant/Prompt/PromptComposer.php).
 - **[ToolRegistry](app/Modules/Assistant/Tools/ToolRegistry.php)** adalah daftar putih alat yang bisa dipanggil model; satu alat satu kelas di [Handlers/](app/Modules/Assistant/Tools/Handlers). Semua fakta kafe, menu, harga, dan ketersediaan meja harus lewat sini, karena model sendiri tidak dipercaya menyimpan data apa pun.
 
-  | Tool | Fungsi |
-  |---|---|
-  | `search_knowledge` | Mencari di knowledge base kafe |
-  | `search_menu` | Mencari menu menurut kata kunci, kategori, kebutuhan diet, atau anggaran |
-  | `get_menu_item` | Detail satu menu: harga, alergen, status habis |
-  | `search_seating` | Mencari area duduk yang cocok dengan tanggal, jumlah tamu, dan sesi |
-  | `check_table_availability` | Cek ketersediaan meja dan biaya reservasi untuk satu sesi |
-  | `create_reservation_request` | Membuat permintaan reservasi meja |
-  | `request_human_handover` | Menyerahkan percakapan ke tim |
+  | Tool                         | Fungsi                                                                   |
+  | ---------------------------- | ------------------------------------------------------------------------ |
+  | `search_knowledge`           | Mencari di knowledge base kafe                                           |
+  | `search_menu`                | Mencari menu menurut kata kunci, kategori, kebutuhan diet, atau anggaran |
+  | `get_menu_item`              | Detail satu menu: harga, alergen, status habis                           |
+  | `search_seating`             | Mencari area duduk yang cocok dengan tanggal, jumlah tamu, dan sesi      |
+  | `check_table_availability`   | Cek ketersediaan meja dan biaya reservasi untuk satu sesi                |
+  | `create_reservation_request` | Membuat permintaan reservasi meja                                        |
+  | `request_human_handover`     | Menyerahkan percakapan ke tim                                            |
 
 - **[ContentGuard](app/Modules/Conversation/Support/ContentGuard.php)** adalah pengaman deterministik di kode. Pesan yang kasar, bersifat seksual, atau ilegal (Indonesia, Inggris, Jepang) dijawab dengan balasan baku tanpa sampai ke model. Balasan model yang masih memuat kata-kata tersebut juga diganti. Pola dibuat sempit supaya pertanyaan kafe yang wajar tidak ikut terblokir.
 - **Harga tanpa sumber ditolak**: balasan yang memuat angka harga atau placeholder yang tidak berasal dari tool akan ditantang, supaya model tidak mengarang harga.
@@ -86,11 +86,11 @@ composer dev
 
 Perintah ini menjalankan semua proses development lewat `php artisan dev`. Daftar prosesnya bisa dilihat dengan `php artisan dev:list`.
 
-| Halaman | URL |
-|---|---|
-| Halaman pembuka | `http://localhost:8000/` |
-| Kafe demo | `http://localhost:8000/cafe-ai` |
-| Admin | `http://localhost:8000/admin` |
+| Halaman         | URL                             |
+| --------------- | ------------------------------- |
+| Halaman pembuka | `http://localhost:8000/`        |
+| Kafe demo       | `http://localhost:8000/cafe-ai` |
+| Admin           | `http://localhost:8000/admin`   |
 
 Akun admin demo (hanya untuk lokal, jangan dipakai di produksi):
 
@@ -123,18 +123,18 @@ Pilihan `--locale` adalah `id`, `en`, atau `ja`. Cara ini berguna untuk menguji 
 
 ## Endpoint utama
 
-| Method | Path | Keterangan |
-|---|---|---|
-| GET | `/{cafeSlug}` | Meja kasir kafe |
-| GET | `/{cafeSlug}/menu`, `/menu/{itemSlug}` | Daftar dan detail menu |
-| GET | `/{cafeSlug}/seating`, `/seating/{areaSlug}` | Daftar dan detail area duduk |
-| GET | `/{cafeSlug}/facilities`, `/facilities/{id}` | Fasilitas dan layanan |
-| GET | `/{cafeSlug}/info`, `/staff`, `/reservation` | Info, tim, reservasi |
-| POST | `/{cafeSlug}/reservation/quote` | Cek ketersediaan dan biaya |
-| POST | `/{cafeSlug}/reservation` | Kirim permintaan reservasi |
-| POST | `/{cafeSlug}/barista/start` | Mulai percakapan |
-| POST | `/{cafeSlug}/barista/message` | Kirim pesan ke barista |
-| GET | `/{cafeSlug}/barista/history` | Riwayat percakapan |
+| Method | Path                                         | Keterangan                   |
+| ------ | -------------------------------------------- | ---------------------------- |
+| GET    | `/{cafeSlug}`                                | Meja kasir kafe              |
+| GET    | `/{cafeSlug}/menu`, `/menu/{itemSlug}`       | Daftar dan detail menu       |
+| GET    | `/{cafeSlug}/seating`, `/seating/{areaSlug}` | Daftar dan detail area duduk |
+| GET    | `/{cafeSlug}/facilities`, `/facilities/{id}` | Fasilitas dan layanan        |
+| GET    | `/{cafeSlug}/info`, `/staff`, `/reservation` | Info, tim, reservasi         |
+| POST   | `/{cafeSlug}/reservation/quote`              | Cek ketersediaan dan biaya   |
+| POST   | `/{cafeSlug}/reservation`                    | Kirim permintaan reservasi   |
+| POST   | `/{cafeSlug}/barista/start`                  | Mulai percakapan             |
+| POST   | `/{cafeSlug}/barista/message`                | Kirim pesan ke barista       |
+| GET    | `/{cafeSlug}/barista/history`                | Riwayat percakapan           |
 
 Endpoint barista dan reservasi dibatasi laju (rate limit). Pembatas barista didefinisikan di [AppServiceProvider](app/Providers/AppServiceProvider.php), dan login admin dibatasi 5 percobaan per menit.
 
@@ -174,7 +174,7 @@ tests/
 
 ## Mengganti ilustrasi
 
-Semua gambar adalah SVG di `public/images/`. Latar scene ada di `scenes/`, karakter barista (PNG/WebP/SVG transparan) di `character/`, avatar bulat di `barista/avatar.svg`. Gambar menu dan area duduk diacu dari kolom `image_url` (path di bawah `public/` atau URL penuh), jadi foto asli bisa dipakai langsung dari panel admin. Pemetaan scene ke gambar ada di [config/cafe.php](config/cafe.php) (`scenes`).
+Semua gambar adalah SVG di `public/images/`. Latar scene ada di `scenes/`, karakter barista (PNG/WebP/SVG transparan) di `character/`, avatar bulat di `barista/avatar.png`. Gambar menu dan area duduk diacu dari kolom `image_url` (path di bawah `public/` atau URL penuh), jadi foto asli bisa dipakai langsung dari panel admin. Pemetaan scene ke gambar ada di [config/cafe.php](config/cafe.php) (`scenes`).
 
 ## Pengujian
 
