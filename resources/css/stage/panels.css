@@ -1,0 +1,643 @@
+/*
+ * Content panels: paper cards on the right, between the header and the board.
+ * The barista stays in view on the left; a panel never reaches past 56% of the screen.
+ */
+
+.stage-panels,
+[data-chat-widget],
+.stage-chat {
+    display: contents;
+}
+
+.stage-content {
+    --panel-w: 760px;
+
+    position: absolute;
+    z-index: 3;
+    right: var(--gutter);
+    top: var(--header);
+    bottom: var(--panel-bottom);
+    width: min(var(--panel-w), 56vw);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 28px 32px;
+    border-radius: var(--radius-card);
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: var(--shadow-card);
+    transition: right .38s var(--ease-cine), width .38s var(--ease-cine);
+}
+
+.stage-content[hidden] {
+    display: none;
+}
+
+.stage-content:focus {
+    outline: none;
+}
+
+.stage-content:not([hidden]) {
+    animation: panel-slide .4s var(--ease-cine) .06s both;
+}
+
+/* Beside the open drawer, a panel narrows instead of sliding under it. */
+.stage:has(.stage-chat.is-open) .stage-content {
+    right: calc(var(--drawer) + var(--gutter) * 2);
+    width: min(var(--panel-w), calc(100vw - var(--drawer) - 34vw - var(--gutter) * 3));
+}
+
+.stage-content > .stage-eyebrow {
+    color: var(--terra-deep);
+}
+
+.stage-content h2 {
+    margin-top: 8px;
+    font: 600 34px/1.15 var(--font-display);
+    letter-spacing: -.01em;
+}
+
+.stage-panel-right {
+    --panel-w: 780px;
+}
+
+.stage-panel-right h2 {
+    font-size: clamp(30px, 3vw, 42px);
+}
+
+.panel-close {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    float: right;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    margin: -6px -8px 0 12px;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    background: var(--paper);
+    font-size: 22px;
+    line-height: 1;
+    transition: background .2s, border-color .2s;
+}
+
+.panel-close:hover {
+    border-color: var(--terra);
+    background: var(--terra-soft);
+}
+
+.stage-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    border-radius: 999px;
+    background: var(--terra);
+    color: var(--paper);
+    padding: 13px 22px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s, transform .2s var(--ease-cine);
+}
+
+.stage-action:hover {
+    background: var(--terra-deep);
+    transform: translateY(-1px);
+}
+
+.stage-action:disabled,
+.wizard-secondary:disabled {
+    cursor: wait;
+    opacity: .55;
+}
+
+/* Detail scene: one dish or seating area at a time, with a quick fade between them. */
+.detail-scene:not([hidden]) {
+    animation: scene-in .3s ease-out both;
+}
+
+.detail-scene .stage-eyebrow {
+    color: var(--terra-deep);
+}
+
+.detail-scene h2 {
+    font-size: 32px;
+}
+
+.detail-scene-step {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 11px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    background: var(--paper);
+    cursor: pointer;
+    transition: background .2s, border-color .2s;
+}
+
+.detail-scene-step:hover {
+    border-color: var(--terra);
+    background: var(--terra-soft);
+}
+
+.detail-scene-thumb {
+    display: block;
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    overflow: hidden;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    background: var(--paper-deep);
+    cursor: pointer;
+    opacity: .7;
+    transition: opacity .2s;
+}
+
+.detail-scene-thumb:hover,
+.detail-scene-thumb[aria-current] {
+    opacity: 1;
+}
+
+.detail-scene-thumb[aria-current] {
+    border-color: var(--terra);
+}
+
+.detail-scene-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 20px;
+    margin-top: 22px;
+    padding: 18px 0;
+    border-block: 1px solid var(--line);
+}
+
+.detail-scene-facts dt {
+    font-size: 11px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+}
+
+.detail-scene-facts dd {
+    margin-top: 3px;
+    font-size: 14px;
+}
+
+.detail-photo {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 20px;
+    background: var(--paper-deep);
+}
+
+.detail-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.detail-badge {
+    position: absolute;
+    left: 14px;
+    top: 14px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: var(--alert);
+    color: var(--paper);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .04em;
+}
+
+.detail-price {
+    font: 600 34px/1.1 var(--font-display);
+    color: var(--ink);
+}
+
+.detail-note {
+    margin-top: 18px;
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--ink-faint);
+}
+
+.tag-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--paper-soft);
+    font-size: 12px;
+    color: var(--ink-soft);
+}
+
+.tag-pill.is-accent {
+    border-color: var(--terra);
+    background: var(--terra);
+    color: var(--paper);
+}
+
+.tag-pill.is-alert {
+    border-color: var(--alert-line);
+    background: var(--alert-soft);
+    color: var(--alert);
+}
+
+/* Facilities */
+.narrator-inline {
+    margin: 10px 0 0;
+    padding: 0;
+    border: 0;
+    background: none;
+}
+
+.narrator-inline .narrator-avatar,
+.narrator-inline .narrator-name {
+    display: none;
+}
+
+.narrator-inline .narrator-text {
+    min-height: 0;
+    margin-top: 0;
+    max-width: 620px;
+    font-size: 16px;
+    color: var(--ink-soft);
+}
+
+.facility-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+@container (min-width: 28rem) {
+    .facility-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@container (min-width: 50rem) {
+    .facility-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.facility-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--paper-soft);
+    transition: transform .2s var(--ease-cine), box-shadow .2s, border-color .2s;
+}
+
+.facility-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--terra);
+    box-shadow: var(--shadow-soft);
+}
+
+.facility-card-photo {
+    position: relative;
+    display: block;
+    flex-shrink: 0;
+    min-height: 0;
+    aspect-ratio: 16 / 10;
+    background: var(--paper-deep);
+}
+
+.facility-card-photo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.facility-card-icon {
+    position: absolute;
+    left: 12px;
+    bottom: -20px;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--paper);
+    color: var(--terra);
+    box-shadow: var(--shadow-soft);
+}
+
+.facility-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 28px 52px 16px 14px;
+}
+
+.facility-card-title {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.facility-card-text {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+}
+
+.facility-card-go {
+    position: absolute;
+    right: 12px;
+    bottom: 16px;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    font-size: 18px;
+    line-height: 1;
+    transition: background .2s, color .2s, border-color .2s;
+}
+
+.facility-card:hover .facility-card-go {
+    border-color: var(--terra);
+    background: var(--terra);
+    color: var(--paper);
+}
+
+.facility-hero {
+    position: relative;
+    height: clamp(170px, 28vh, 260px);
+}
+
+.facility-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 18px;
+}
+
+.facility-hero .facility-card-icon {
+    left: 18px;
+    bottom: -20px;
+}
+
+.stage-content .facility-hero + h2 {
+    margin-top: 34px;
+}
+
+/* Cafe information and talking to the team: shorter cards that hug their content. */
+.info-panel,
+.staff-panel {
+    bottom: auto;
+    max-height: calc(100dvh - var(--header) - var(--panel-bottom));
+}
+
+.info-panel {
+    --panel-w: 540px;
+}
+
+.staff-panel {
+    --panel-w: 520px;
+}
+
+.info-panel h2,
+.staff-panel h2 {
+    font-size: clamp(26px, 2.6vw, 36px);
+}
+
+/* Opening and closing time, read like the two halves of a cafe receipt. */
+.info-stay {
+    display: flex;
+    align-items: stretch;
+    margin-top: 20px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--paper-soft);
+}
+
+.info-stay-item {
+    flex: 1;
+    padding: 12px 18px;
+}
+
+.info-stay-label {
+    display: block;
+    font-size: 11.5px;
+    color: var(--terra-deep);
+}
+
+.info-stay-time {
+    display: block;
+    margin-top: 2px;
+    font: 600 22px var(--font-display);
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+}
+
+.info-stay-divider {
+    flex-shrink: 0;
+    width: 1px;
+    margin: 10px 0;
+    background-image: repeating-linear-gradient(180deg, var(--line-strong) 0 6px, transparent 6px 12px);
+}
+
+.info-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.info-fact {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--paper-soft);
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    transition: background .2s, border-color .2s;
+}
+
+a.info-fact:hover {
+    background: var(--terra-soft);
+    border-color: var(--terra);
+}
+
+.info-fact svg {
+    flex-shrink: 0;
+    color: var(--terra);
+}
+
+.info-address {
+    margin-top: 10px;
+    font-size: 12.5px;
+    color: var(--ink-faint);
+}
+
+.info-section-heading {
+    margin-top: 26px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Policies and FAQ share the panel through a tab switch: one topic in view, no long scroll. */
+.info-tabs {
+    margin-top: 24px;
+}
+
+.info-tab-radio {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.info-tablist {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 999px;
+    background: var(--paper-deep);
+}
+
+.info-tablist label {
+    flex: 1;
+    padding: 8px 6px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-faint);
+    text-align: center;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+}
+
+.info-tabpanel {
+    display: none;
+    margin-top: 6px;
+}
+
+#info-tab-general:checked ~ .info-tablist label[for="info-tab-general"],
+#info-tab-policies:checked ~ .info-tablist label[for="info-tab-policies"],
+#info-tab-faq:checked ~ .info-tablist label[for="info-tab-faq"] {
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: 0 1px 3px rgb(58 36 24 / .16);
+}
+
+#info-tab-general:focus-visible ~ .info-tablist label[for="info-tab-general"],
+#info-tab-policies:focus-visible ~ .info-tablist label[for="info-tab-policies"],
+#info-tab-faq:focus-visible ~ .info-tablist label[for="info-tab-faq"] {
+    outline: 3px solid var(--terra);
+    outline-offset: 2px;
+}
+
+#info-tab-general:checked ~ .info-tabpanels [data-panel="general"],
+#info-tab-policies:checked ~ .info-tabpanels [data-panel="policies"],
+#info-tab-faq:checked ~ .info-tabpanels [data-panel="faq"] {
+    display: block;
+}
+
+.info-list {
+    margin-top: 2px;
+}
+
+.info-row {
+    border-top: 1px solid var(--line);
+}
+
+.info-list .info-row:last-child {
+    border-bottom: 1px solid var(--line);
+}
+
+.info-row summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 0;
+    cursor: pointer;
+    list-style: none;
+    font-size: 13.5px;
+    font-weight: 600;
+}
+
+.info-row summary::-webkit-details-marker {
+    display: none;
+}
+
+.info-row-chevron {
+    flex-shrink: 0;
+    margin-left: auto;
+    color: var(--ink-faint);
+    transition: transform .2s;
+}
+
+.info-row[open] .info-row-chevron {
+    transform: rotate(90deg);
+}
+
+.info-row p {
+    margin: 0 0 14px;
+    padding-right: 24px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+}
+
+.staff-location {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+}
+
+.staff-location h3 {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--terra-deep);
+}
+
+.staff-location p {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--ink-soft);
+}
+
+@keyframes panel-slide {
+    from { opacity: 0; translate: 28px 0; }
+    to { opacity: 1; translate: 0 0; }
+}
+
+@keyframes scene-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .stage-content:not([hidden]),
+    .detail-scene:not([hidden]) {
+        animation: none;
+    }
+}

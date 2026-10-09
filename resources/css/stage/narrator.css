@@ -1,0 +1,183 @@
+/*
+ * The AI barista introducing a scene: a typed line with a speaking avatar. On the
+ * stage it sits inside the speech card; inline it sits inside a panel.
+ */
+
+.narrator {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin: 18px 0 8px;
+    padding: 16px 18px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--paper-soft);
+}
+
+.narrator-avatar {
+    position: relative;
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 2px solid var(--line-strong);
+    background-color: var(--terra-soft);
+    background-image: var(--barista-image);
+    background-repeat: no-repeat;
+    background-position: var(--barista-focus, center);
+    background-size: var(--barista-zoom, cover);
+}
+
+.narrator-avatar::after {
+    content: '';
+    position: absolute;
+    inset: -7px;
+    border: 2px solid var(--terra);
+    border-radius: 50%;
+    opacity: 0;
+}
+
+.narrator.is-speaking .narrator-avatar {
+    animation: narrator-nod 1.6s ease-in-out infinite;
+}
+
+.narrator.is-speaking .narrator-avatar::after {
+    animation: narrator-ring 1.4s ease-out infinite;
+}
+
+.narrator-bubble {
+    min-width: 0;
+    flex: 1;
+}
+
+/* On the stage she is already on screen, so the card needs no avatar. */
+.narrator-on-stage {
+    margin: 14px 0 0;
+    padding: 0;
+    border: 0;
+    background: none;
+}
+
+.narrator-on-stage .narrator-avatar {
+    display: none;
+}
+
+.narrator-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    color: var(--terra-deep);
+}
+
+.narrator-wave {
+    display: inline-flex;
+    height: 14px;
+    align-items: center;
+    gap: 2px;
+}
+
+.narrator-wave i {
+    display: block;
+    width: 3px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--terra);
+    opacity: .5;
+    transition: height .2s;
+}
+
+.narrator.is-speaking .narrator-wave i {
+    opacity: 1;
+    animation: barista-wave .55s ease-in-out infinite alternate;
+    height: 14px;
+}
+
+.narrator.is-speaking .narrator-wave i:nth-child(2n) { animation-delay: .15s; }
+.narrator.is-speaking .narrator-wave i:nth-child(3) { animation-delay: .3s; }
+
+.narrator-text {
+    white-space: pre-line;
+    min-height: 3.4em;
+    margin-top: 6px;
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+}
+
+/* The untyped part stays in layout so the bubble does not resize while she types. */
+.narrator-rest {
+    opacity: 0;
+}
+
+.narrator.is-speaking .narrator-typed::after {
+    content: '';
+    display: inline-block;
+    width: 2px;
+    height: 1em;
+    margin-left: 2px;
+    vertical-align: -2px;
+    background: var(--terra);
+    animation: narrator-caret .8s steps(1) infinite;
+}
+
+.narrator-actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 8px;
+}
+
+.narrator-actions button {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--terra-deep);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.narrator-actions button[hidden] {
+    display: none;
+}
+
+@keyframes barista-wave {
+    from { height: 4px; }
+    to { height: 14px; }
+}
+
+@keyframes narrator-nod {
+    0%, 100% { transform: translateY(0) rotate(0); }
+    30% { transform: translateY(-2px) rotate(-1.5deg); }
+    65% { transform: translateY(1px) rotate(1deg); }
+}
+
+@keyframes narrator-ring {
+    from { transform: scale(.92); opacity: .8; }
+    to { transform: scale(1.18); opacity: 0; }
+}
+
+@keyframes narrator-caret {
+    50% { opacity: 0; }
+}
+
+@media (max-width: 599px) {
+    .narrator {
+        gap: 12px;
+        padding: 14px;
+    }
+
+    .narrator-avatar {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .narrator.is-speaking .narrator-avatar,
+    .narrator.is-speaking .narrator-avatar::after,
+    .narrator.is-speaking .narrator-wave i,
+    .narrator.is-speaking .narrator-typed::after {
+        animation: none;
+    }
+}

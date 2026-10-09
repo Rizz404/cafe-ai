@@ -1,0 +1,38 @@
+/* The speech card above the barista: the greeting, or the scene's title and narration. */
+
+.stage-welcome {
+    position: absolute;
+    z-index: 2;
+    left: max(340px, 26vw);
+    top: calc(var(--header) + 12px);
+    width: min(500px, 36vw);
+    padding: 24px 28px 26px;
+    /* The squared corner is the tail: it points down to her. */
+    border-radius: var(--radius-card) var(--radius-card) var(--radius-card) 6px;
+    background: color-mix(in srgb, var(--paper) 95%, transparent);
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(14px);
+    color: var(--ink);
+}
+
+.stage-welcome h1 {
+    margin-top: 10px;
+    font: 600 clamp(30px, 3vw, 46px)/1.08 var(--font-display);
+    letter-spacing: -.02em;
+}
+
+.stage-welcome h1 em {
+    font-weight: 400;
+    color: var(--terra);
+}
+
+.stage-welcome p {
+    margin-top: 14px;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+}
+
+.stage-welcome-scene h1 {
+    font-size: clamp(26px, 2.4vw, 38px);
+}

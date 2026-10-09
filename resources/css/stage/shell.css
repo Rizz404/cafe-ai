@@ -1,0 +1,229 @@
+/* The scene, the barista, the arrival and the walk to the next scene. */
+
+.stage-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--stage-focus, center 22%);
+    filter: brightness(1.14) saturate(1.06);
+    transform-origin: 40% 40%;
+    transition: transform 1s cubic-bezier(.2, .7, .2, 1), filter 1s ease;
+    animation: stage-settle 1s var(--ease-cine) backwards;
+    z-index: -2;
+}
+
+/* A soft cream wash lifts the dark scene art under the board and the header. */
+.stage-shade {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+        linear-gradient(0deg, rgb(251 244 230 / .5) 0, rgb(251 244 230 / .12) 26%, transparent 44%),
+        linear-gradient(180deg, rgb(58 36 24 / .16), transparent 22%);
+}
+
+/* She stands behind the counter, bottom-left, and is cut flat at the bottom edge. */
+.stage-character {
+    position: absolute;
+    z-index: 0;
+    bottom: 0;
+    left: 1%;
+    height: min(78%, 860px);
+    width: auto;
+    max-width: 36%;
+    object-fit: contain;
+    object-position: bottom left;
+    pointer-events: none;
+    animation: character-arrive .6s var(--ease-cine) .08s backwards;
+}
+
+.stage.is-leaving .stage-character {
+    opacity: 0;
+    transform: translateY(8px) scale(.985);
+    transition: opacity .28s ease, transform .4s var(--ease-cine);
+}
+
+.stage-page.is-thinking .stage-image {
+    filter: brightness(1.18) saturate(1.1);
+}
+
+/* What the barista says while she walks the guest to the next scene. */
+.stage-tour {
+    position: absolute;
+    z-index: 20;
+    left: 50%;
+    bottom: calc(var(--board-h) + var(--gutter) + 28px);
+    width: max-content;
+    max-width: min(720px, calc(100% - 48px));
+    padding: 14px 28px;
+    border-radius: 999px;
+    background: var(--paper);
+    box-shadow: var(--shadow-card);
+    color: var(--ink);
+    font: italic clamp(17px, 1.8vw, 24px)/1.4 var(--font-display);
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    translate: -50% 0;
+}
+
+.stage-tour:empty {
+    display: none;
+}
+
+.stage-tour.is-visible {
+    animation: tour-rise .4s var(--ease-cine) both;
+}
+
+/* Loader, enter transition and arrival */
+@media (prefers-reduced-motion: no-preference) {
+    @view-transition {
+        navigation: auto;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation-duration: .36s;
+        animation-timing-function: ease;
+    }
+}
+
+.stage-loader {
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    background: var(--paper-deep);
+    color: var(--terra-deep);
+    font-size: 14px;
+    letter-spacing: .04em;
+    opacity: 0;
+    pointer-events: none;
+    animation: loader-in .25s ease .3s forwards, loader-out .45s ease 2.6s forwards;
+}
+
+.stage-loader.is-ready {
+    opacity: 0;
+    visibility: hidden;
+    animation: none;
+    transition: opacity .3s ease;
+}
+
+/* Leaving: the camera moves in while everything else fades. stage.js holds
+   navigation for 320/560/820 ms; keep these durations at or below that. */
+.stage.is-leaving .stage-image {
+    transform: scale(1.09);
+    filter: brightness(.85);
+    transition: transform .8s var(--ease-cine), filter .6s ease;
+    animation: none;
+}
+
+.stage.is-leaving > :not(.stage-image, .stage-shade, .stage-loader, .stage-tour) {
+    opacity: 0;
+    animation: none;
+    transition: opacity .22s ease;
+}
+
+/* The chat sits inside a display:contents wrapper, so it has to be faded by hand. */
+.stage.is-leaving .chat-log,
+.stage.is-leaving .chat-bar,
+.stage.is-leaving .chat-launcher {
+    opacity: 0;
+    pointer-events: none;
+    animation: none;
+    transition: opacity .22s ease;
+}
+
+/* `backwards`, not `both`: once they have arrived the resting styles must win again. */
+.stage-menu,
+.stage-welcome,
+.opening-panel,
+.opening-enter {
+    animation: stage-rise .5s var(--ease-cine) .12s backwards;
+}
+
+.chat-launcher {
+    animation: stage-fade .5s ease .25s backwards;
+}
+
+.stage-navigation a,
+.item-nav a,
+.opening-links li {
+    animation: stage-rise .45s var(--ease-cine) backwards;
+    animation-delay: calc(.2s + var(--i, 0) * 45ms);
+}
+
+.stage-navigation a:nth-child(1), .item-nav a:nth-child(1), .opening-links li:nth-child(1) { --i: 0; }
+.stage-navigation a:nth-child(2), .item-nav a:nth-child(2), .opening-links li:nth-child(2) { --i: 1; }
+.stage-navigation a:nth-child(3), .item-nav a:nth-child(3), .opening-links li:nth-child(3) { --i: 2; }
+.stage-navigation a:nth-child(4), .item-nav a:nth-child(4), .opening-links li:nth-child(4) { --i: 3; }
+.stage-navigation a:nth-child(n+5), .item-nav a:nth-child(n+5), .opening-links li:nth-child(n+5) { --i: 4; }
+
+@keyframes stage-settle {
+    from { scale: 1.05; opacity: .7; }
+    to { scale: 1; opacity: 1; }
+}
+
+@keyframes character-arrive {
+    from { opacity: 0; transform: translateY(18px) scale(.99); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes loader-in {
+    to { opacity: 1; }
+}
+
+@keyframes loader-out {
+    from { opacity: 1; }
+    to { opacity: 0; visibility: hidden; }
+}
+
+@keyframes stage-rise {
+    from { opacity: 0; translate: 0 12px; }
+    to { opacity: 1; translate: 0 0; }
+}
+
+@keyframes stage-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes tour-rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .stage-image,
+    .stage-character,
+    .stage-loader,
+    .stage-menu,
+    .stage-welcome,
+    .opening-panel,
+    .opening-enter,
+    .chat-launcher,
+    .stage-navigation a,
+    .item-nav a,
+    .opening-links li {
+        animation: none;
+    }
+
+    .stage-image {
+        transition: none;
+    }
+
+    .stage.is-leaving .stage-image {
+        transition: none;
+    }
+
+    .stage-tour.is-visible {
+        animation: none;
+        opacity: 1;
+    }
+}

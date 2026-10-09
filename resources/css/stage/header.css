@@ -1,0 +1,112 @@
+/* The floating paper bar: the cafe on the left, sound and language on the right. */
+
+.stage-header {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 5;
+    display: flex;
+    height: var(--header);
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 0 var(--gutter);
+    pointer-events: none;
+}
+
+.stage-header > * {
+    pointer-events: auto;
+}
+
+.stage-header > :first-child {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 22px 7px 7px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(14px);
+    color: var(--ink);
+}
+
+.cafe-monogram {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--terra);
+    color: var(--paper);
+    font: 600 23px var(--font-display);
+}
+
+.stage-tools {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stage-lang {
+    display: flex;
+    gap: 2px;
+    padding: 4px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(14px);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+}
+
+.stage-lang a {
+    border-radius: 999px;
+    padding: 7px 13px;
+    transition: background .2s;
+}
+
+.stage-lang a:hover {
+    background: var(--paper-soft);
+}
+
+.stage-lang a[aria-current] {
+    background: var(--terra);
+    color: var(--paper);
+}
+
+.sound-toggle {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(14px);
+    color: var(--ink);
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.sound-toggle:hover {
+    background: var(--paper);
+}
+
+.sound-toggle .sound-mute {
+    display: none;
+}
+
+.sound-toggle.is-muted .sound-mute {
+    display: block;
+}
+
+.sound-toggle.is-muted .sound-waves {
+    display: none;
+}
+
+.sound-toggle.is-muted {
+    color: var(--ink-faint);
+}

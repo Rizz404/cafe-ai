@@ -1,0 +1,96 @@
+/*
+ * The guest stage: one fixed, non-scrolling screen. The illustrated cafe is the
+ * scene; the barista stands bottom-left, speaks from a card above her, the
+ * menu board runs along the bottom and the chat slides in from the right.
+ *
+ * Every colour and size of the stage lives in this file. The stage is exempt
+ * from `npm run lint:ui` (it is an illustration, not the admin kit).
+ */
+
+.stage-page {
+    /* Warm paper, dark roast ink, terracotta and leaf green. */
+    --paper: #fbf4e6;
+    --paper-soft: #f5ead6;
+    --paper-deep: #efdfc3;
+    --ink: #3a2418;
+    --ink-soft: #6b5648;
+    --ink-faint: #9a8573;
+    --line: #e8d9bf;
+    --line-strong: #d9c4a1;
+    --terra: #c8643c;
+    --terra-deep: #a84f2c;
+    --terra-soft: #f6d9c7;
+    --leaf: #5f7a45;
+    --sun: #f0c96b;
+    --alert: #a4472f;
+    --alert-soft: #fbeee9;
+    --alert-line: #e8b8a6;
+
+    --radius-card: 24px;
+    --radius-control: 14px;
+    --shadow-card: 0 22px 50px -22px rgb(58 36 24 / .55), 0 2px 8px rgb(58 36 24 / .12);
+    --shadow-soft: 0 10px 28px -14px rgb(58 36 24 / .5);
+
+    /* Arrows such as ↗ stay text glyphs instead of turning into coloured emoji. */
+    font-variant-emoji: text;
+
+    height: 100dvh;
+    overflow: hidden;
+    background: var(--paper-deep);
+    color: var(--ink);
+}
+
+.stage {
+    --ease-cine: cubic-bezier(.22, .8, .24, 1);
+    --header: 84px;
+    --gutter: 28px;
+    --board-h: 168px;
+    --drawer: 400px;
+    --panel-bottom: var(--gutter);
+    --chat-composer-height: 56px;
+
+    position: relative;
+    height: 100dvh;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+/* Scenes with a menu board keep their panels clear of it. */
+.stage:has(.stage-menu) {
+    --panel-bottom: calc(var(--board-h) + var(--gutter) + 16px);
+}
+
+.stage :focus-visible,
+.stage-page :focus-visible {
+    outline: 3px solid var(--terra);
+    outline-offset: 3px;
+}
+
+.stage button:disabled {
+    cursor: wait;
+    opacity: .5;
+}
+
+.stage-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--terra-deep);
+}
+
+.stage-noscript {
+    position: absolute;
+    z-index: 9;
+    inset: auto 12px 12px;
+    padding: 16px;
+    border-radius: 12px;
+    background: var(--paper);
+    color: var(--ink);
+}
+
+@media (max-width: 1100px) {
+    .stage {
+        --drawer: 360px;
+    }
+}

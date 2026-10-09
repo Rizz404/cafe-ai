@@ -1,0 +1,106 @@
+/* Opening screen: a title card in the middle, the barista on the left, one big way in. */
+
+.opening-panel {
+    position: absolute;
+    z-index: 4;
+    left: 0;
+    right: 0;
+    margin-inline: auto;
+    top: calc(var(--header) + 24px);
+    width: min(620px, calc(100% - 48px));
+    padding: 32px 36px 30px;
+    border-radius: 32px;
+    background: color-mix(in srgb, var(--paper) 95%, transparent);
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(14px);
+    text-align: center;
+}
+
+.opening-panel h1 {
+    margin-top: 12px;
+    font: 600 clamp(34px, 4vw, 54px)/1.08 var(--font-display);
+    letter-spacing: -.02em;
+}
+
+.opening-panel h1 em {
+    font-weight: 400;
+    color: var(--terra);
+}
+
+.opening-tagline {
+    margin: 14px auto 0;
+    max-width: 440px;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+}
+
+.opening-links {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.opening-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 52px;
+    padding: 6px 10px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--paper-soft);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.25;
+    transition: transform .2s var(--ease-cine), background .2s, border-color .2s;
+}
+
+.opening-links a:hover {
+    transform: translateY(-3px);
+    border-color: var(--terra);
+    background: var(--terra-soft);
+}
+
+.opening-links a span:last-child {
+    display: none;
+}
+
+.opening-enter {
+    position: absolute;
+    z-index: 5;
+    inset: auto 0 44px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    padding: 0 16px;
+}
+
+.opening-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 38px;
+    border-radius: 999px;
+    background: var(--terra);
+    color: var(--paper);
+    font-size: 17px;
+    font-weight: 600;
+    box-shadow: var(--shadow-card);
+    transition: transform .2s var(--ease-cine), background .2s;
+}
+
+.opening-button:hover {
+    background: var(--terra-deep);
+    transform: translateY(-2px);
+}
+
+.opening-empty {
+    padding: 14px 22px;
+    border-radius: 999px;
+    background: var(--paper);
+    font-size: 14px;
+}
