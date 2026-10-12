@@ -1,0 +1,3 @@
+{
+    "unbacked_data": "[System notice: your last reply stated a price or pretended to show menu or table cards without calling a tool. Never state a menu price, a sold-out status or table availability from memory. Call search_menu, get_menu_item, search_seating or check_table_availability now, or ask the guest for the details you still need.]"
+}

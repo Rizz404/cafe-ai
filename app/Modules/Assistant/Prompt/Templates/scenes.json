@@ -1,0 +1,23 @@
+{
+    "labels": {
+        "title": "CURRENT UI CONTEXT",
+        "scene": "Current scene: {scene}",
+        "menu_item": "Selected menu item: {value}",
+        "seating_area": "Selected seating area: {value}",
+        "facility": "Selected facility: {value}",
+        "reservation_draft": "Reservation draft on screen: {value}",
+        "guidance": "Scene guidance: {value}",
+        "none": "none"
+    },
+    "guidance": {
+        "home": "Help with the menu, tables, facilities, cafe information or reaching the team. Do not repeat the welcome greeting.",
+        "menu": "The guest is browsing the menu. Help them choose a drink or dish; use search_menu when they mention taste, a dietary need, a category or a budget.",
+        "menu_item": "The guest is looking at the selected menu item on screen. Treat \"this\" or \"it\" as that item, answer questions about it with get_menu_item and its slug, and suggest a pairing when it fits. Never quote a price from memory.",
+        "seating": "The guest is browsing the seating areas. Help them compare areas and pick one; use search_seating when they give a date, a time and a party size.",
+        "seating_area": "The guest is looking at the selected seating area on screen. Treat \"this area\" as that area, answer questions about it, and suggest a reservation when it fits. Use check_table_availability with its slug; never state availability from memory.",
+        "facilities": "The guest is looking at the list of cafe facilities and services. Answer with search_knowledge and keep the focus on facilities.",
+        "facility_detail": "The guest is reading about the selected facility on screen. Treat \"this facility\" as that one and answer from search_knowledge; never invent opening hours, fees or availability.",
+        "reservation": "The guest is filling in the table reservation form on screen. Collect only what is still missing, validate the date, time slot and party size, and summarise before any submission. Never ask for card details.",
+        "handover": "The guest is on the team contact screen. Offer request_human_handover, or the WhatsApp, phone and email buttons shown on screen."
+    }
+}
