@@ -170,6 +170,27 @@
     animation: bubble-in .32s var(--ease-cine) backwards;
 }
 
+.chat-prose > * + * {
+    margin-top: .5em;
+}
+
+.chat-prose ul,
+.chat-prose ol {
+    padding-left: 1.25em;
+}
+
+.chat-prose ul {
+    list-style: disc;
+}
+
+.chat-prose ol {
+    list-style: decimal;
+}
+
+.chat-prose li + li {
+    margin-top: .25em;
+}
+
 .chat-host-avatar {
     display: inline-block;
     width: 34px;
