@@ -31,6 +31,10 @@ function initBarista() {
             open: root.dataset.labelOpen,
             close: root.dataset.labelClose,
             intro: root.dataset.labelIntro,
+            voiceStart: root.dataset.labelVoiceStart,
+            voiceStop: root.dataset.labelVoiceStop,
+            voiceListening: root.dataset.labelVoiceListening,
+            voiceDenied: root.dataset.labelVoiceDenied,
             soldOut: root.dataset.labelSoldOut,
             guests: root.dataset.labelGuests,
             availableSlots: root.dataset.labelAvailableSlots,
@@ -74,7 +78,9 @@ function initBarista() {
     const closeButton = widget.querySelector('[data-chat-close]');
     const launcher = widget.querySelector('[data-chat-launcher]');
     const newChatButton = widget.querySelector('[data-chat-new]');
+    const micButton = root.querySelector('[data-chat-mic]');
 
+    let recognition = null;
     let ready = false;
     let busy = false;
     let handedOver = false;
@@ -129,6 +135,7 @@ function initBarista() {
 
     function finishClosePanel({ restoreFocus = true } = {}) {
         isOpen = false;
+        stopListening({ send: false });
         syncPanelState();
         hideDraftDialog();
         if (restoreFocus) launcher?.focus();
@@ -396,6 +403,7 @@ function initBarista() {
         submitEl.disabled = disabled;
         if (launcher) launcher.disabled = busy || !ready;
         if (newChatButton) newChatButton.disabled = busy || !ready;
+        if (micButton) micButton.disabled = disabled;
         root.setAttribute('aria-busy', String(busy));
         document.body.classList.toggle('is-thinking', busy);
         if (thinkingIndicator) {
@@ -706,6 +714,7 @@ function initBarista() {
         if (!ready || busy) return;
 
         ready = false;
+        stopListening({ send: false });
         stopPolling();
         localStorage.removeItem(config.storageKey);
         messagesEl.replaceChildren();
@@ -729,6 +738,97 @@ function initBarista() {
     }
 
     newChatButton?.addEventListener('click', startNewChat);
+
+    /**
+     * Voice input through the browser's speech recognition (no server round
+     * trip for audio). The spoken question fills the input as it is heard and
+     * is sent as soon as the guest stops talking.
+     */
+    const SpeechRecognitionApi = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const speechLocales = { ja: 'ja-JP', en: 'en-US', id: 'id-ID' };
+
+    function setListening(listening) {
+        if (!micButton) return;
+
+        const label = listening ? config.labels.voiceStop : config.labels.voiceStart;
+        micButton.classList.toggle('is-listening', listening);
+        micButton.setAttribute('aria-pressed', String(listening));
+        micButton.setAttribute('aria-label', label);
+        micButton.title = label;
+        inputEl.placeholder = listening ? config.labels.voiceListening : config.labels.placeholder;
+    }
+
+    /** Stops listening; with `send: false` whatever was heard so far is thrown away. */
+    function stopListening({ send = true } = {}) {
+        if (!recognition) return;
+
+        if (send) {
+            recognition.stop();
+            return;
+        }
+
+        recognition.discarded = true;
+        recognition.abort();
+    }
+
+    function startListening() {
+        if (!SpeechRecognitionApi || recognition || !ready || busy || handedOver) return;
+
+        const session = new SpeechRecognitionApi();
+        let transcript = '';
+        let failed = false;
+
+        session.lang = speechLocales[config.locale] || speechLocales.id;
+        session.interimResults = true;
+        session.continuous = false;
+
+        session.addEventListener('result', (event) => {
+            transcript = Array.from(event.results).map((result) => result[0].transcript).join('').trim();
+            inputEl.value = transcript;
+        });
+
+        session.addEventListener('error', (event) => {
+            failed = true;
+            if (event.error !== 'not-allowed' && event.error !== 'service-not-allowed') return;
+
+            setChatStatus(config.labels.voiceDenied, 'error');
+            window.setTimeout(() => {
+                if (chatStatus.textContent === config.labels.voiceDenied) setChatStatus('');
+            }, 6000);
+        });
+
+        session.addEventListener('end', () => {
+            if (recognition === session) {
+                recognition = null;
+                setListening(false);
+            }
+
+            if (session.discarded) {
+                if (transcript) inputEl.value = '';
+                return;
+            }
+
+            if (failed || !transcript || busy || handedOver) return;
+
+            inputEl.value = '';
+            sendMessage(transcript);
+        });
+
+        recognition = session;
+        setListening(true);
+
+        try {
+            session.start();
+        } catch {
+            recognition = null;
+            setListening(false);
+        }
+    }
+
+    if (micButton && SpeechRecognitionApi) {
+        micButton.hidden = false;
+        micButton.addEventListener('click', () => (recognition ? stopListening() : startListening()));
+    }
 
     formEl.addEventListener('submit', (event) => {
         event.preventDefault();

@@ -281,6 +281,39 @@
     background: var(--terra-deep);
 }
 
+.chat-bar .chat-mic {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    padding: 0;
+    border: 1px solid var(--line-strong);
+    background: transparent;
+    color: var(--ink);
+}
+
+.chat-bar .chat-mic[hidden] {
+    display: none;
+}
+
+.chat-bar .chat-mic:hover:not(:disabled) {
+    background: var(--paper-deep);
+}
+
+.chat-bar .chat-mic.is-listening {
+    border-color: var(--terra);
+    background: var(--terra);
+    color: var(--paper);
+    animation: status-pulse 1.4s ease-in-out infinite;
+}
+
+.chat-bar .chat-mic:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.chat-status.is-error { color: var(--terra-deep); }
+.chat-status.is-error::before { background: var(--terra); }
+
 .chat-draft-dialog {
     position: absolute;
     z-index: 9;
@@ -322,6 +355,7 @@
 
     .chat-thinking-dots i,
     .chat-status.is-waiting::before,
+    .chat-bar .chat-mic.is-listening,
     .chat-log-messages > * {
         animation: none;
     }

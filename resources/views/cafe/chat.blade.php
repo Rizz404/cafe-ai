@@ -12,7 +12,11 @@
             data-label-send="{{ $labels['chat_send'] }}"
             data-label-open="{{ $labels['chat_open'] }}"
             data-label-close="{{ $labels['chat_close'] }}"
-            data-label-intro="{{ $labels['chat_intro'] }}"            data-label-sold-out="{{ $labels['sold_out'] }}"
+            data-label-intro="{{ $labels['chat_intro'] }}"
+            data-label-voice-start="{{ $labels['chat_voice_start'] }}"
+            data-label-voice-stop="{{ $labels['chat_voice_stop'] }}"
+            data-label-voice-listening="{{ $labels['chat_voice_listening'] }}"
+            data-label-voice-denied="{{ $labels['chat_voice_denied'] }}"            data-label-sold-out="{{ $labels['sold_out'] }}"
             data-label-guests="{{ $labels['guests'] }}"
             data-label-available-slots="{{ $labels['available_slots'] }}"
             data-label-no-availability="{{ $labels['no_availability'] }}"
@@ -82,6 +86,9 @@
                     placeholder="{{ $labels['chat_placeholder'] }}"
                     autocomplete="off"
                 >
+                <button type="button" data-chat-mic class="chat-mic" aria-pressed="false" aria-label="{{ $labels['chat_voice_start'] }}" title="{{ $labels['chat_voice_start'] }}" hidden>
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+                </button>
                 <button type="submit" data-chat-submit>{{ $labels['chat_send'] }}</button>
             </form>
 
