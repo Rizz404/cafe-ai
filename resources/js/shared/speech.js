@@ -1,6 +1,6 @@
 /**
  * Plays the barista's reply aloud. The audio is made by the backend (text to
- * speech), fetched as one MP3 and played right away. Every failure is silent:
+ * speech), fetched as one WAV file and played right away. Every failure is silent:
  * the reply is already on screen, so the guest only loses the voice.
  */
 import { csrfToken } from './api.js';
@@ -44,7 +44,7 @@ export function createSpeaker({ url, onChange = () => {} }) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    Accept: 'audio/mpeg',
+                    Accept: 'audio/*',
                     'X-CSRF-TOKEN': csrfToken(),
                 },
                 body: JSON.stringify(payload),

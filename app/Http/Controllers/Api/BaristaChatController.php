@@ -106,7 +106,7 @@ class BaristaChatController extends Controller
         }
 
         return response($audio, 200, [
-            'Content-Type' => 'audio/mpeg',
+            'Content-Type' => SpeechSynthesizer::MIME_TYPE,
             'Cache-Control' => 'private, max-age=86400',
         ]);
     }

@@ -51,24 +51,31 @@ class BaristaSpeechTest extends TestCase
 
     public function test_a_barista_reply_is_spoken_as_audio(): void
     {
-        Http::fake(['openrouter.test/*' => Http::response('mp3-bytes', 200, ['Content-Type' => 'audio/mpeg'])]);
+        Http::fake(['openrouter.test/*' => Http::response('pcm-bytes', 200, ['Content-Type' => 'audio/pcm;rate=24000;channels=1'])]);
         $message = $this->say(ConversationMessage::ROLE_ASSISTANT, 'Welcome to **Demo**!');
 
-        $this->postJson('/demo/barista/speech', $this->payloadFor($message))
+        $response = $this->postJson('/demo/barista/speech', $this->payloadFor($message))
             ->assertOk()
-            ->assertHeader('Content-Type', 'audio/mpeg');
+            ->assertHeader('Content-Type', 'audio/wav');
+
+        $wav = $response->getContent();
+        $this->assertSame('RIFF', substr($wav, 0, 4));
+        $this->assertSame('WAVE', substr($wav, 8, 4));
+        $this->assertSame(24000, unpack('V', substr($wav, 24, 4))[1]);
+        $this->assertSame(1, unpack('v', substr($wav, 22, 2))[1]);
+        $this->assertSame('pcm-bytes', substr($wav, 44));
 
         Http::assertSent(fn (Request $request) => $request->url() === 'https://openrouter.test/api/v1/audio/speech'
             && $request->hasHeader('Authorization', 'Bearer router-key')
             && $request['model'] === 'google/test-tts'
             && $request['voice'] === 'Sulafat'
             && $request['input'] === 'Welcome to Demo!'
-            && $request['response_format'] === 'mp3');
+            && $request['response_format'] === 'pcm');
     }
 
     public function test_a_line_that_was_already_spoken_is_not_paid_for_twice(): void
     {
-        Http::fake(['openrouter.test/*' => Http::response('mp3-bytes')]);
+        Http::fake(['openrouter.test/*' => Http::response('pcm-bytes')]);
         $first = $this->say(ConversationMessage::ROLE_ASSISTANT, 'Welcome to Demo!');
         $second = $this->say(ConversationMessage::ROLE_ASSISTANT, 'Welcome to Demo!');
 
@@ -112,7 +119,7 @@ class BaristaSpeechTest extends TestCase
 
     public function test_speech_is_rate_limited_per_conversation(): void
     {
-        Http::fake(['openrouter.test/*' => Http::response('mp3-bytes')]);
+        Http::fake(['openrouter.test/*' => Http::response('pcm-bytes')]);
         $message = $this->say(ConversationMessage::ROLE_ASSISTANT, 'Welcome to Demo!');
 
         foreach (range(1, 12) as $attempt) {
