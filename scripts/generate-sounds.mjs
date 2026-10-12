@@ -2,12 +2,13 @@
 /**
  * Cafe UI sound generator. Node built-ins only.
  *
- * Synthesises the three guest-stage sounds and writes them as 16-bit mono WAV
- * files that resources/js/sound.js imports through Vite:
+ * Synthesises the three guest-stage sounds as 16-bit mono WAV, then
+ * transcodes them to 64 kbps MP3 (needs ffmpeg on PATH) because the WAVs are
+ * several times larger. resources/js/sound.js imports the MP3s through Vite:
  *
- *   enter.wav     the little brass bells on a cafe door, shaken as it opens
- *   incoming.wav  the "ting" of a counter service bell (the barista replied)
- *   sent.wav      a spoon tapping a ceramic cup (the guest sent a message)
+ *   enter.mp3     the little brass bells on a cafe door, shaken as it opens
+ *   incoming.mp3  the "ting" of a counter service bell (the barista replied)
+ *   sent.mp3      a spoon tapping a ceramic cup (the guest sent a message)
  *
  * The output is deterministic (seeded noise), so re-running only changes the
  * files when this script changes. To change a sound, edit it below and run
@@ -15,7 +16,9 @@
  *
  * Usage: node scripts/generate-sounds.mjs [--out <dir>]
  */
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -234,10 +237,18 @@ const SOUNDS = {
 
 mkdirSync(OUT_DIR, { recursive: true });
 
-for (const [name, render] of Object.entries(SOUNDS)) {
-    const track = render();
-    const file = join(OUT_DIR, `${name}.wav`);
+const workDir = mkdtempSync(join(tmpdir(), 'cafe-sounds-'));
 
-    writeFileSync(file, encodeWav(track));
-    console.log(`${name}.wav  ${(track.length / SAMPLE_RATE).toFixed(2)}s  ${Math.round((track.length * 2 + 44) / 1024)} KB`);
+try {
+    for (const [name, render] of Object.entries(SOUNDS)) {
+        const track = render();
+        const wavFile = join(workDir, `${name}.wav`);
+        const mp3File = join(OUT_DIR, `${name}.mp3`);
+
+        writeFileSync(wavFile, encodeWav(track));
+        execFileSync('ffmpeg', ['-y', '-v', 'error', '-i', wavFile, '-codec:a', 'libmp3lame', '-b:a', '64k', '-ar', String(SAMPLE_RATE), '-ac', '1', mp3File]);
+        console.log(`${name}.mp3  ${(track.length / SAMPLE_RATE).toFixed(2)}s`);
+    }
+} finally {
+    rmSync(workDir, { recursive: true, force: true });
 }
