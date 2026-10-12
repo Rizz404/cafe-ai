@@ -41,4 +41,11 @@ return [
         'model' => env('LOCAL_LLM_MODEL'),
     ],
 
+    'openrouter' => [
+        'base_url' => env('OPENROUTER_BASE_URL', 'https://openrouter.ai/api/v1'),
+        'api_key' => env('OPENROUTER_API_KEY'),
+        'tts_model' => env('OPENROUTER_TTS_MODEL'),
+        'tts_voice' => env('OPENROUTER_TTS_VOICE'),
+    ],
+
 ];
