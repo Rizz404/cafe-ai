@@ -122,6 +122,7 @@ return [
         'chat_send' => 'Send',
         'chat_open' => 'Chat with the AI Barista',
         'chat_close' => 'Close conversation',
+        'chat_new' => 'New chat',
         'chat_intro' => 'Hi! I\'m the AI Barista here. Ask me about the menu, a table for your group, or anything about the cafe.',
         'sold_out' => 'Sold out',
         'guests' => 'guests',

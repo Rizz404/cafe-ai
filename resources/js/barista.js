@@ -73,6 +73,7 @@ function initBarista() {
     const chatLog = root.querySelector('#barista-chat-log');
     const closeButton = widget.querySelector('[data-chat-close]');
     const launcher = widget.querySelector('[data-chat-launcher]');
+    const newChatButton = widget.querySelector('[data-chat-new]');
 
     let ready = false;
     let busy = false;
@@ -394,6 +395,7 @@ function initBarista() {
         inputEl.disabled = disabled;
         submitEl.disabled = disabled;
         if (launcher) launcher.disabled = busy || !ready;
+        if (newChatButton) newChatButton.disabled = busy || !ready;
         root.setAttribute('aria-busy', String(busy));
         document.body.classList.toggle('is-thinking', busy);
         if (thinkingIndicator) {
@@ -693,6 +695,41 @@ function initBarista() {
         scrollToBottom();
     }
 
+    function showConnectionError() {
+        statusBanner.textContent = root.dataset.labelConnectionError;
+        statusBanner.classList.remove('hidden');
+        messagesEl.appendChild(bubble('assistant', config.labels.intro));
+    }
+
+    /** Wipes this browser's conversation and starts a fresh one with a new guest token. */
+    async function startNewChat() {
+        if (!ready || busy) return;
+
+        ready = false;
+        stopPolling();
+        localStorage.removeItem(config.storageKey);
+        messagesEl.replaceChildren();
+        handedOver = false;
+        knownMessageCount = 0;
+        statusBanner.classList.add('hidden');
+        setChatStatus('');
+        inputEl.value = '';
+        setBusy(true);
+
+        try {
+            await boot();
+            ready = true;
+        } catch {
+            showConnectionError();
+        } finally {
+            setBusy(false);
+            scrollToBottom();
+            if (ready) inputEl.focus();
+        }
+    }
+
+    newChatButton?.addEventListener('click', startNewChat);
+
     formEl.addEventListener('submit', (event) => {
         event.preventDefault();
         if (!ready || busy || handedOver || !inputEl.value.trim()) return;
@@ -717,11 +754,7 @@ function initBarista() {
     boot().then(() => {
         ready = true;
         scrollToBottom();
-    }).catch(() => {
-        statusBanner.textContent = root.dataset.labelConnectionError;
-        statusBanner.classList.remove('hidden');
-        messagesEl.appendChild(bubble('assistant', config.labels.intro));
-    }).finally(() => {
+    }).catch(showConnectionError).finally(() => {
         setBusy(false);
 
         // The guest chose this topic from the menu on the previous scene:

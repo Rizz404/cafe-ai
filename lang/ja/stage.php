@@ -122,6 +122,7 @@ return [
         'chat_send' => '送信',
         'chat_open' => 'AIバリスタに相談',
         'chat_close' => '会話を閉じる',
+        'chat_new' => '新しい会話',
         'chat_intro' => 'こんにちは。AIバリスタです。メニューやお席、お店のことを何でもお尋ねください。',
         'sold_out' => '売り切れ',
         'guests' => '名',

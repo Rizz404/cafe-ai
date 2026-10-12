@@ -122,6 +122,7 @@ return [
         'chat_send' => 'Kirim',
         'chat_open' => 'Chat dengan AI Barista',
         'chat_close' => 'Tutup percakapan',
+        'chat_new' => 'Chat baru',
         'chat_intro' => 'Halo! Saya AI Barista di sini. Tanyakan apa saja soal menu, meja untuk rombongan Anda, atau info kafe.',
         'sold_out' => 'Habis',
         'guests' => 'tamu',

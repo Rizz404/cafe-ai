@@ -107,6 +107,26 @@
     background: var(--paper-deep);
 }
 
+.chat-log-new {
+    flex-shrink: 0;
+    padding: 6px 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.chat-log-new:hover:not(:disabled) {
+    background: var(--paper-deep);
+}
+
+.chat-log-new:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
 .chat-status {
     display: flex;
     align-items: center;

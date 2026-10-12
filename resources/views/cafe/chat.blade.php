@@ -12,8 +12,7 @@
             data-label-send="{{ $labels['chat_send'] }}"
             data-label-open="{{ $labels['chat_open'] }}"
             data-label-close="{{ $labels['chat_close'] }}"
-            data-label-intro="{{ $labels['chat_intro'] }}"
-            data-label-sold-out="{{ $labels['sold_out'] }}"
+            data-label-intro="{{ $labels['chat_intro'] }}"            data-label-sold-out="{{ $labels['sold_out'] }}"
             data-label-guests="{{ $labels['guests'] }}"
             data-label-available-slots="{{ $labels['available_slots'] }}"
             data-label-no-availability="{{ $labels['no_availability'] }}"
@@ -57,6 +56,7 @@
                         <p class="truncate text-xs text-stone-500">{{ $labels['chat_subtitle'] }}</p>
                         <p data-chat-status class="chat-status" aria-live="polite" hidden></p>
                     </div>
+                    <button type="button" data-chat-new class="chat-log-new" aria-label="{{ $labels['chat_new'] }}">{{ $labels['chat_new'] }}</button>
                     <button type="button" data-chat-close class="chat-log-close" aria-label="{{ $labels['chat_close'] }}"><span aria-hidden="true">×</span></button>
                 </header>
 
