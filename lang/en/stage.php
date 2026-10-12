@@ -122,6 +122,8 @@ return [
         'chat_send' => 'Send',
         'chat_open' => 'Chat with the AI Barista',
         'chat_close' => 'Close conversation',
+        'chat_expand' => 'Widen chat',
+        'chat_collapse' => 'Narrow chat',
         'chat_new' => 'New chat',
         'chat_voice_start' => 'Speak your question',
         'chat_voice_stop' => 'Stop listening',

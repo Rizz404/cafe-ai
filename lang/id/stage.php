@@ -122,6 +122,8 @@ return [
         'chat_send' => 'Kirim',
         'chat_open' => 'Chat dengan AI Barista',
         'chat_close' => 'Tutup percakapan',
+        'chat_expand' => 'Lebarkan chat',
+        'chat_collapse' => 'Persempit chat',
         'chat_new' => 'Chat baru',
         'chat_voice_start' => 'Ucapkan pertanyaan Anda',
         'chat_voice_stop' => 'Berhenti mendengarkan',

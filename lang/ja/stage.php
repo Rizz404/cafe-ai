@@ -122,6 +122,8 @@ return [
         'chat_send' => '送信',
         'chat_open' => 'AIバリスタに相談',
         'chat_close' => '会話を閉じる',
+        'chat_expand' => 'チャットを広げる',
+        'chat_collapse' => 'チャットを戻す',
         'chat_new' => '新しい会話',
         'chat_voice_start' => '音声で質問する',
         'chat_voice_stop' => '音声入力を止める',

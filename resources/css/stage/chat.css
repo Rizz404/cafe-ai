@@ -72,7 +72,7 @@
     visibility: hidden;
     pointer-events: none;
     transform: translateX(32px);
-    transition: opacity .28s ease, transform .38s var(--ease-cine), visibility .28s;
+    transition: opacity .28s ease, transform .38s var(--ease-cine), visibility .28s, width .38s var(--ease-cine);
 }
 
 .stage-chat.is-open .chat-log {
@@ -105,6 +105,40 @@
 
 .chat-log-close:hover {
     background: var(--paper-deep);
+}
+
+/* Desktop only: below this width the chat already fills the screen. */
+.chat-log-expand {
+    display: none;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.chat-log-expand:hover {
+    background: var(--paper-deep);
+}
+
+.chat-log-expand .chat-expand-icon-narrow,
+.chat-log-expand[aria-pressed="true"] .chat-expand-icon-wide {
+    display: none;
+}
+
+.chat-log-expand[aria-pressed="true"] .chat-expand-icon-narrow {
+    display: block;
+}
+
+@media (min-width: 900px) {
+    .chat-log-expand {
+        display: grid;
+    }
+
+    .stage-chat.is-expanded {
+        --drawer: min(860px, 62vw);
+    }
 }
 
 .chat-log-new {
@@ -261,7 +295,7 @@
     visibility: hidden;
     pointer-events: none;
     transform: translateX(32px);
-    transition: opacity .24s ease, transform .38s var(--ease-cine), visibility .24s;
+    transition: opacity .24s ease, transform .38s var(--ease-cine), visibility .24s, width .38s var(--ease-cine);
 }
 
 .stage-chat.is-open .chat-bar {

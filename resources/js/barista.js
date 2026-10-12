@@ -48,6 +48,8 @@ function initBarista() {
             statusSent: root.dataset.labelStatusSent,
             statusWaiting: root.dataset.labelStatusWaiting,
             statusReplied: root.dataset.labelStatusReplied,
+            chatExpand: root.dataset.labelChatExpand,
+            chatCollapse: root.dataset.labelChatCollapse,
             draftTitle: root.dataset.labelDraftTitle,
             draftBody: root.dataset.labelDraftBody,
             draftKeep: root.dataset.labelDraftKeep,
@@ -84,6 +86,7 @@ function initBarista() {
     const closeButton = widget.querySelector('[data-chat-close]');
     const launcher = widget.querySelector('[data-chat-launcher]');
     const newChatButton = widget.querySelector('[data-chat-new]');
+    const expandButton = widget.querySelector('[data-chat-expand]');
     const micButton = root.querySelector('[data-chat-mic]');
 
     let recognition = null;
@@ -787,6 +790,32 @@ function initBarista() {
     }
 
     newChatButton?.addEventListener('click', startNewChat);
+
+    /** Widens the panel on desktop; remembered across pages, ignored where storage is blocked. */
+    const expandedKey = 'barista_chat_expanded';
+
+    function setExpanded(expanded, { remember = true } = {}) {
+        root.classList.toggle('is-expanded', expanded);
+        const label = expanded ? config.labels.chatCollapse : config.labels.chatExpand;
+        expandButton?.setAttribute('aria-pressed', String(expanded));
+        expandButton?.setAttribute('aria-label', label);
+        expandButton?.setAttribute('title', label);
+
+        if (!remember) return;
+
+        try {
+            localStorage.setItem(expandedKey, expanded ? '1' : '0');
+        } catch { /* the preference just is not remembered */ }
+    }
+
+    expandButton?.addEventListener('click', () => {
+        setExpanded(!root.classList.contains('is-expanded'));
+        scrollToBottom();
+    });
+
+    try {
+        if (localStorage.getItem(expandedKey) === '1') setExpanded(true, { remember: false });
+    } catch { /* storage blocked */ }
 
     /**
      * Voice input through the browser's speech recognition (no server round
