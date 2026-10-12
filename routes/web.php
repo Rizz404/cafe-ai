@@ -59,5 +59,6 @@ Route::prefix('{cafeSlug}')->middleware('cafe')->group(function () {
         Route::post('start', [BaristaChatController::class, 'start'])->middleware('throttle:barista-start')->name('start');
         Route::post('message', [BaristaChatController::class, 'message'])->middleware('throttle:barista-message')->name('message');
         Route::get('history', [BaristaChatController::class, 'history'])->middleware('throttle:barista-history')->name('history');
+        Route::post('speech', [BaristaChatController::class, 'speech'])->middleware('throttle:barista-speech')->name('speech');
     });
 });

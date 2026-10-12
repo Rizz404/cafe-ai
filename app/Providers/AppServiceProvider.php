@@ -45,5 +45,10 @@ class AppServiceProvider extends ServiceProvider
         ]);
 
         RateLimiter::for('barista-history', fn (Request $request) => Limit::perMinute(60)->by('history:'.$request->ip()));
+
+        RateLimiter::for('barista-speech', fn (Request $request) => [
+            Limit::perMinute(12)->by('speech:'.($request->input('guest_token') ?: $request->ip())),
+            Limit::perMinute(40)->by('speech-ip:'.$request->ip()),
+        ]);
     }
 }

@@ -6,15 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Http\Middleware\ResolveCafe;
 use App\Http\Requests\Api\ConversationHistoryRequest;
 use App\Http\Requests\Api\SendMessageRequest;
+use App\Http\Requests\Api\SpeakMessageRequest;
 use App\Models\Cafe;
 use App\Models\Conversation;
 use App\Models\ConversationMessage;
+use App\Modules\Assistant\Speech\SpeechSynthesizer;
+use App\Modules\Assistant\Speech\SpeechText;
 use App\Modules\Conversation\Actions\RememberUiContext;
 use App\Modules\Conversation\Actions\ReplyToGuest;
 use App\Modules\Conversation\Actions\StartConversation;
 use App\Modules\Conversation\Support\MessagePresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
@@ -69,6 +73,41 @@ class BaristaChatController extends Controller
         return response()->json([
             'messages' => $messages,
             'status' => $conversation->status,
+        ]);
+    }
+
+    /**
+     * The barista's reply as audio. Only an assistant message of this guest's
+     * own conversation can be spoken, so the endpoint is not a free voice for
+     * arbitrary text. Any failure is a plain 204: the reply is already on
+     * screen and the barista simply stays quiet.
+     */
+    public function speech(SpeakMessageRequest $request, SpeechSynthesizer $speech): Response
+    {
+        $conversation = $this->findConversation(ResolveCafe::cafe($request), $request->validated('guest_token'));
+
+        $message = $conversation->messages()
+            ->where('role', ConversationMessage::ROLE_ASSISTANT)
+            ->whereKey($request->validated('message_id'))
+            ->firstOrFail();
+
+        $text = SpeechText::from((string) $message->content);
+
+        if ($text === '' || ! $speech->available()) {
+            return response()->noContent();
+        }
+
+        try {
+            $audio = $speech->synthesize($text);
+        } catch (\Throwable $e) {
+            Log::warning('Barista speech failed', ['message_id' => $message->id, 'error' => $e->getMessage()]);
+
+            return response()->noContent();
+        }
+
+        return response($audio, 200, [
+            'Content-Type' => 'audio/mpeg',
+            'Cache-Control' => 'private, max-age=86400',
         ]);
     }
 

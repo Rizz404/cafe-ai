@@ -10,11 +10,12 @@ use App\Models\ConversationMessage;
 final class MessagePresenter
 {
     /**
-     * @return array{role: string, content: ?string, ui_payload: ?array<int, array<string, mixed>>, suggested_actions: list<array{action: string, item?: string, area?: string}>, created_at: string}
+     * @return array{id: int, role: string, content: ?string, ui_payload: ?array<int, array<string, mixed>>, suggested_actions: list<array{action: string, item?: string, area?: string}>, created_at: string}
      */
     public static function format(ConversationMessage $message): array
     {
         return [
+            'id' => $message->id,
             'role' => $message->role,
             'content' => $message->content,
             'ui_payload' => $message->ui_payload,
