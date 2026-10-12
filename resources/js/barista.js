@@ -23,7 +23,6 @@ function initBarista() {
         homeUrl: root.dataset.homeUrl,
         itemUrlTemplate: root.dataset.itemUrl,
         staffUrl: root.dataset.staffUrl,
-        reservationUrlTemplate: root.dataset.reservationUrl,
         terms: JSON.parse(root.dataset.terms || '{}'),
         labels: {
             placeholder: root.dataset.labelPlaceholder,
@@ -56,6 +55,12 @@ function initBarista() {
             itemDetailsQuestion: root.dataset.labelItemDetailsQuestion,
             reserveTable: root.dataset.labelReserveTable,
             reserveSlotQuestion: root.dataset.labelReserveSlotQuestion,
+            reserveThisSlotQuestion: root.dataset.labelReserveThisSlotQuestion,
+            reserveStartQuestion: root.dataset.labelReserveStartQuestion,
+            reservationPending: root.dataset.labelReservationPending,
+            sendWhatsapp: root.dataset.labelSendWhatsapp,
+            callCafe: root.dataset.labelCallCafe,
+            emailCafe: root.dataset.labelEmailCafe,
             menuHeading: root.dataset.labelMenuHeading,
             staff: root.dataset.labelStaff,
             error: root.dataset.labelError,
@@ -348,7 +353,16 @@ function initBarista() {
             <p class="font-medium text-stone-900">${esc(q.name)}</p>
             <p class="text-xs text-stone-500">${esc(formatDate(q.date))} · ${esc(q.time_range)}</p>
             <p class="mt-1 text-sm font-semibold text-stone-900">${esc(feeText(q.reservation_fee))}</p>
+            <button type="button" class="mt-2 w-full rounded-lg bg-stone-900 px-2 py-1.5 text-xs font-medium text-white" data-reserve-slot>
+                ${esc(config.labels.reserveTable)}
+            </button>
         `;
+        el.querySelector('[data-reserve-slot]').addEventListener('click', () => {
+            sendMessage(config.labels.reserveThisSlotQuestion
+                .replace(':area', q.name)
+                .replace(':date', formatDate(q.date))
+                .replace(':time', q.time_range));
+        });
         return el;
     }
 
@@ -361,7 +375,30 @@ function initBarista() {
             <p class="mt-1 text-xs text-emerald-800">${esc(config.labels.reference)}: ${esc(r.reservation_reference)} · ${esc(r.name)}</p>
             <p class="text-xs text-emerald-800">${esc(formatDate(r.date))} · ${esc(r.time_range)} · ${esc(r.guests)} ${esc(config.labels.guests)}</p>
             <p class="mt-1 text-sm font-semibold text-emerald-900">${esc(feeText(r.deposit_total))}</p>
+            <p class="mt-1 text-xs text-emerald-800">${esc(config.labels.reservationPending)}</p>
         `;
+
+        const links = [
+            ['whatsapp_url', config.labels.sendWhatsapp],
+            ['phone_url', config.labels.callCafe],
+            ['email_url', config.labels.emailCafe],
+        ].filter(([key]) => payload.handover?.[key]);
+
+        if (links.length) {
+            const row = document.createElement('div');
+            row.className = 'mt-2 flex flex-wrap gap-1.5';
+            links.forEach(([key, label]) => {
+                const link = document.createElement('a');
+                link.href = payload.handover[key];
+                link.target = '_blank';
+                link.rel = 'noopener';
+                link.className = 'rounded-full border border-emerald-300 bg-white px-2.5 py-1 text-xs font-medium text-emerald-900 hover:bg-emerald-100';
+                link.textContent = label;
+                row.appendChild(link);
+            });
+            el.appendChild(row);
+        }
+
         return el;
     }
 
@@ -559,24 +596,33 @@ function initBarista() {
         if (!actions || !actions.length) return null;
 
         const itemUrl = (slug) => config.itemUrlTemplate.replace('__SLUG__', encodeURIComponent(slug));
-        const reservationUrl = (slug) => (slug
-            ? config.reservationUrlTemplate.replace('__SLUG__', encodeURIComponent(slug))
-            : config.reservationUrlTemplate.replace(/[?&]area=__SLUG__/, ''));
         const targets = {
             view_item: [config.labels.viewDetails, (action) => itemUrl(action.item)],
-            reserve: [config.labels.reserveTable, (action) => reservationUrl(action.area)],
             staff: [config.labels.staff, () => config.staffUrl],
         };
+        const chipClass = 'rounded-full border border-stone-300 bg-white px-3 py-1.5 text-xs font-medium text-stone-700 hover:bg-stone-50';
 
         const wrap = document.createElement('div');
         wrap.className = 'flex flex-wrap gap-2 pl-10';
 
         actions.forEach((action) => {
+            // Booking happens in the conversation itself, so it asks the
+            // barista instead of walking to the reservation page.
+            if (action.action === 'reserve') {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = chipClass;
+                button.textContent = config.labels.reserveTable;
+                button.addEventListener('click', () => sendMessage(config.labels.reserveStartQuestion));
+                wrap.appendChild(button);
+                return;
+            }
+
             const target = targets[action.action];
             if (!target) return;
             const link = document.createElement('a');
             link.href = target[1](action);
-            link.className = 'rounded-full border border-stone-300 bg-white px-3 py-1.5 text-xs font-medium text-stone-700 hover:bg-stone-50';
+            link.className = chipClass;
             link.textContent = target[0];
             link.addEventListener('click', (event) => {
                 closePanel({ confirmDraft: false, restoreFocus: false });

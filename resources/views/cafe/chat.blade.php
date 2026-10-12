@@ -16,7 +16,8 @@
             data-label-voice-start="{{ $labels['chat_voice_start'] }}"
             data-label-voice-stop="{{ $labels['chat_voice_stop'] }}"
             data-label-voice-listening="{{ $labels['chat_voice_listening'] }}"
-            data-label-voice-denied="{{ $labels['chat_voice_denied'] }}"            data-label-sold-out="{{ $labels['sold_out'] }}"
+            data-label-voice-denied="{{ $labels['chat_voice_denied'] }}"
+            data-label-sold-out="{{ $labels['sold_out'] }}"
             data-label-guests="{{ $labels['guests'] }}"
             data-label-available-slots="{{ $labels['available_slots'] }}"
             data-label-no-availability="{{ $labels['no_availability'] }}"
@@ -37,6 +38,12 @@
             data-label-item-details-question="{{ $labels['item_details_question'] }}"
             data-label-reserve-table="{{ $labels['reserve_table'] }}"
             data-label-reserve-slot-question="{{ $labels['reserve_slot_question'] }}"
+            data-label-reserve-this-slot-question="{{ $labels['reserve_this_slot_question'] }}"
+            data-label-reserve-start-question="{{ $labels['reserve_start_question'] }}"
+            data-label-reservation-pending="{{ $labels['reservation_pending'] }}"
+            data-label-send-whatsapp="{{ $labels['send_whatsapp'] }}"
+            data-label-call-cafe="{{ $labels['call_cafe'] }}"
+            data-label-email-cafe="{{ $labels['email_cafe'] }}"
             data-terms="{{ json_encode(['tag' => $terms['tag'], 'allergen' => $terms['allergen'], 'area_type' => $terms['area_type'], 'feature' => $terms['feature'], 'serving' => $terms['serving']], JSON_UNESCAPED_UNICODE) }}"
             data-label-menu-heading="{{ $labels['menu_heading_chat'] }}"
             data-label-staff="{{ $labels['team'] }}"
@@ -47,7 +54,6 @@
             data-home-url="{{ route('cafe.show', ['cafeSlug' => $cafe->slug, 'lang' => $locale]) }}"
             data-item-url="{{ route('cafe.menu-item', ['cafeSlug' => $cafe->slug, 'itemSlug' => '__SLUG__', 'lang' => $locale]) }}"
             data-staff-url="{{ route('cafe.staff', ['cafeSlug' => $cafe->slug, 'lang' => $locale]) }}"
-            data-reservation-url="{{ route('cafe.reservation', ['cafeSlug' => $cafe->slug, 'lang' => $locale, 'area' => '__SLUG__']) }}"
         >
             <section id="barista-chat-log" class="chat-log" aria-label="{{ $labels['chat_heading'] }}" aria-hidden="true">
                 <header class="chat-log-header">

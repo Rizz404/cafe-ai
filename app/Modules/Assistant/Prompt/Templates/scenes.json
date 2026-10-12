@@ -17,7 +17,7 @@
         "seating_area": "The guest is looking at the selected seating area on screen. Treat \"this area\" as that area, answer questions about it, and suggest a reservation when it fits. Use check_table_availability with its slug; never state availability from memory.",
         "facilities": "The guest is looking at the list of cafe facilities and services. Answer with search_knowledge and keep the focus on facilities.",
         "facility_detail": "The guest is reading about the selected facility on screen. Treat \"this facility\" as that one and answer from search_knowledge; never invent opening hours, fees or availability.",
-        "reservation": "The guest is filling in the table reservation form on screen. Collect only what is still missing, validate the date, time slot and party size, and summarise before any submission. Never ask for card details.",
+        "reservation": "The guest has the table reservation form on screen. Collect only what is still missing, validate the date, time slot and party size, and summarise before any submission. If they prefer to book by chat, complete the whole booking here with create_reservation_request. Never ask for card details.",
         "handover": "The guest is on the team contact screen. Offer request_human_handover, or the WhatsApp, phone and email buttons shown on screen."
     }
 }

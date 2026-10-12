@@ -45,7 +45,11 @@ class BaristaReservationToolTest extends TestCase
         $this->assertSame(150000.0, (float) $reservation->deposit_total);
         $this->assertSame([1, 0], TableInventory::orderBy('time_slot')->pluck('reserved_tables')->all());
 
-        $taken = $this->runTool($cafe, $conversation, 'create_reservation_request', $input);
+        $repeated = $this->runTool($cafe, $conversation, 'create_reservation_request', $input);
+        $this->assertSame($reservation->reference, $repeated['ui']['reservation']['reservation_reference']);
+        $this->assertSame(1, Reservation::count());
+
+        $taken = $this->runTool($cafe, $conversation, 'create_reservation_request', [...$input, 'guest_name' => 'Budi']);
         $this->assertNull($taken['ui']);
         $this->assertSame(1, Reservation::count());
 
@@ -76,6 +80,33 @@ class BaristaReservationToolTest extends TestCase
         $this->assertSame(0, Reservation::count());
     }
 
+    public function test_the_reservation_tool_needs_a_usable_name_and_contact_before_it_books(): void
+    {
+        $cafe = Cafe::create(['name' => 'Demo', 'slug' => 'demo', 'public_status' => 'published']);
+        $area = $cafe->seatingAreas()->create(['name' => 'Bar', 'slug' => 'bar', 'area_type' => 'bar', 'min_guests' => 1, 'max_guests' => 4, 'is_active' => true]);
+        $conversation = Conversation::create(['cafe_id' => $cafe->id, 'guest_token' => (string) Str::uuid(), 'locale' => 'en']);
+        $date = CarbonImmutable::now($cafe->timezone)->addDays(2);
+        TableInventory::create(['seating_area_id' => $area->id, 'reservation_date' => $date->toDateString(), 'time_slot' => '15:00', 'total_tables' => 2, 'reserved_tables' => 0]);
+
+        $base = ['seating_area_slug' => 'bar', 'date' => $date->toDateString(), 'time_slot' => '15:00', 'guests' => 2];
+
+        foreach ([
+            ['guest_phone' => '+62 811 111 222'],
+            ['guest_name' => 'Ayu'],
+            ['guest_name' => 'Ayu', 'guest_phone' => 'call me'],
+            ['guest_name' => 'Ayu', 'guest_email' => 'not-an-email'],
+        ] as $guest) {
+            $this->assertNull($this->runTool($cafe, $conversation, 'create_reservation_request', [...$base, ...$guest])['ui']);
+        }
+
+        $this->assertSame(0, Reservation::count());
+
+        $byEmail = $this->runTool($cafe, $conversation, 'create_reservation_request', [...$base, 'guest_name' => 'Ayu', 'guest_email' => 'ayu@example.com']);
+
+        $this->assertNotNull($byEmail['ui']);
+        $this->assertSame('email', Reservation::firstOrFail()->contact_type);
+    }
+
     public function test_menu_search_filters_by_diet_and_budget_and_hides_unpublished_items(): void
     {
         $cafe = Cafe::create(['name' => 'Demo', 'slug' => 'demo', 'public_status' => 'published', 'currency' => 'IDR']);
@@ -83,7 +114,6 @@ class BaristaReservationToolTest extends TestCase
         $cafe->menuItems()->create(['name' => 'Club Sandwich', 'slug' => 'club-sandwich', 'category' => 'food', 'price' => 52000, 'tags' => ['halal'], 'is_active' => true]);
         $cafe->menuItems()->create(['name' => 'Secret Dish', 'slug' => 'secret', 'category' => 'food', 'price' => 10000, 'tags' => ['vegan'], 'is_active' => false]);
         $conversation = Conversation::create(['cafe_id' => $cafe->id, 'guest_token' => (string) Str::uuid(), 'locale' => 'en']);
-
 
         $vegan = $this->runTool($cafe, $conversation, 'search_menu', ['dietary' => 'vegan']);
         $this->assertSame(['aglio-olio'], collect($vegan['ui']['items'])->pluck('menu_item_slug')->all());

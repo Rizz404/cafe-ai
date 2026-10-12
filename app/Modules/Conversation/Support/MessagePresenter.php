@@ -25,7 +25,8 @@ final class MessagePresenter
 
     /**
      * Interface actions that follow from what the barista just showed, so the
-     * guest can step into the matching scene instead of typing again.
+     * guest can step into the matching scene instead of typing again. Booking
+     * is not one of those scenes: it continues in the chat itself.
      *
      * @param  list<array<string, mixed>>|null  $uiPayload
      * @return list<array{action: string, item?: string, area?: string}>
@@ -37,13 +38,10 @@ final class MessagePresenter
         foreach ($uiPayload ?? [] as $payload) {
             $type = $payload['type'] ?? null;
             $item = $payload['item']['menu_item_slug'] ?? null;
-            $area = $payload['quote']['seating_area_slug'] ?? $payload['seating_area_slug'] ?? null;
 
             if ($type === 'menu_detail' && $item) {
                 $actions[] = ['action' => 'view_item', 'item' => $item];
                 $actions[] = ['action' => 'reserve'];
-            } elseif ($type === 'availability' && ($payload['available'] ?? false) && $area) {
-                $actions[] = ['action' => 'reserve', 'area' => $area];
             } elseif ($type === 'handover') {
                 $actions[] = ['action' => 'staff'];
             }
