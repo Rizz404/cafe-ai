@@ -7,6 +7,7 @@
             data-start-url="{{ route('barista.start', $cafe->slug) }}"
             data-message-url="{{ route('barista.message', $cafe->slug) }}"
             data-history-url="{{ route('barista.history', $cafe->slug) }}"
+            data-speech-url="{{ route('barista.speech', $cafe->slug) }}"
             data-storage-key="barista_token_{{ $cafe->slug }}"
             data-label-placeholder="{{ $labels['chat_placeholder'] }}"
             data-label-send="{{ $labels['chat_send'] }}"

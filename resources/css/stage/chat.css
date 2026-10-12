@@ -239,6 +239,22 @@
     background-size: var(--barista-zoom, cover);
 }
 
+.stage-chat.is-voicing .chat-log-header .chat-host-avatar {
+    animation: chat-voice-ring 1.4s ease-out infinite;
+}
+
+@keyframes chat-voice-ring {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--terra, currentColor) 45%, transparent); }
+    100% { box-shadow: 0 0 0 10px transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .stage-chat.is-voicing .chat-log-header .chat-host-avatar {
+        animation: none;
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--terra, currentColor) 35%, transparent);
+    }
+}
+
 .chat-thinking {
     display: flex;
     align-items: flex-end;

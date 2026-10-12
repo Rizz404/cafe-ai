@@ -8,6 +8,7 @@
 import { getJson, postJson } from './shared/api.js';
 import { renderChatText } from './shared/chat-text.js';
 import { escapeHtml } from './shared/dom.js';
+import { createSpeaker } from './shared/speech.js';
 
 function initBarista() {
     const root = document.getElementById('barista-app');
@@ -18,6 +19,7 @@ function initBarista() {
         startUrl: root.dataset.startUrl,
         messageUrl: root.dataset.messageUrl,
         historyUrl: root.dataset.historyUrl,
+        speechUrl: root.dataset.speechUrl,
         storageKey: root.dataset.storageKey,
         locale: root.dataset.locale,
         currency: root.dataset.currency,
@@ -98,6 +100,20 @@ function initBarista() {
     let isOpen = false;
     let draftDialogOpen = false;
 
+    /** The barista's voice; it follows the same sound toggle as the interface sounds. */
+    const speaker = createSpeaker({
+        url: config.speechUrl,
+        onChange: (speaking) => root.classList.toggle('is-voicing', speaking),
+    });
+
+    function speakReply(message) {
+        if (!config.speechUrl || !message.id || !message.content || !window.cafeSound?.isEnabled()) return;
+
+        speaker.speak({ guest_token: localStorage.getItem(config.storageKey), message_id: message.id });
+    }
+
+    window.addEventListener('pagehide', () => speaker.stop());
+
     function setChatStatus(text, tone = '') {
         if (!chatStatus) return;
 
@@ -144,6 +160,7 @@ function initBarista() {
 
     function finishClosePanel({ restoreFocus = true } = {}) {
         isOpen = false;
+        speaker.stop();
         stopListening({ send: false });
         syncPanelState();
         hideDraftDialog();
@@ -690,6 +707,7 @@ function initBarista() {
         if (!guestToken) return;
 
         openPanel();
+        speaker.stop();
         if (!retry) messagesEl.appendChild(bubble('guest', text));
         window.cafeSound?.play('sent');
         scrollToBottom();
@@ -700,6 +718,7 @@ function initBarista() {
             renderMessage(data.message);
             setChatStatus(config.labels.statusSent, 'sent');
             window.cafeSound?.play('incoming');
+            speakReply(data.message);
             knownMessageCount += 2; // the guest message just sent + the reply just rendered
             if (data.status === 'handed_over') {
                 showHandedOverBanner();
@@ -766,6 +785,7 @@ function initBarista() {
         if (!ready || busy) return;
 
         ready = false;
+        speaker.stop();
         stopListening({ send: false });
         stopPolling();
         localStorage.removeItem(config.storageKey);
@@ -852,6 +872,7 @@ function initBarista() {
     function startListening() {
         if (!SpeechRecognitionApi || recognition || !ready || busy || handedOver) return;
 
+        speaker.stop();
         const session = new SpeechRecognitionApi();
         let transcript = '';
         let failed = false;
