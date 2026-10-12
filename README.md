@@ -174,7 +174,7 @@ tests/
 
 ## Mengganti ilustrasi
 
-Semua gambar adalah SVG di `public/images/`. Latar scene ada di `scenes/`, karakter barista (PNG/WebP/SVG transparan) di `character/`, avatar bulat di `barista/avatar.png`. Gambar menu dan area duduk diacu dari kolom `image_url` (path di bawah `public/` atau URL penuh), jadi foto asli bisa dipakai langsung dari panel admin. Pemetaan scene ke gambar ada di [config/cafe.php](config/cafe.php) (`scenes`).
+Semua gambar adalah SVG di `public/images/`. Latar scene ada di `scenes/`, karakter barista (WebP/SVG transparan) di `character/`, avatar bulat di `barista/avatar.webp`. Gambar menu dan area duduk diacu dari kolom `image_url` (path di bawah `public/` atau URL penuh), jadi foto asli bisa dipakai langsung dari panel admin. Pemetaan scene ke gambar ada di [config/cafe.php](config/cafe.php) (`scenes`).
 
 ## Pengujian
 
