@@ -2,6 +2,9 @@
 <aside class="stage-menu" aria-label="{{ $labels['menu_heading'] }}">
     <a href="{{ route('cafe.show', ['cafeSlug' => $cafe->slug, 'lang' => $locale]) }}" data-stage-exit data-tour-line="{{ $narration['tour_home'] }}" class="stage-menu-back"><span aria-hidden="true">‹</span> {{ $stageCopy['explore'] }}</a>
     <p class="stage-eyebrow">{{ $labels['menu_heading'] }}</p>
+    @if ($lastOrder = session('coffee_orders.'.$cafe->id))
+        <a href="{{ route('coffee-orders.show', ['cafeSlug' => $cafe->slug, 'reference' => $lastOrder, 'lang' => $locale]) }}" class="stage-menu-back">{{ __('coffee.track') }} →</a>
+    @endif
     <nav class="item-nav">
         @foreach ($menuItems->groupBy('category') as $category => $group)
             <p class="item-nav-heading">{{ $terms['category'][$category] ?? Str::headline($category) }}</p>

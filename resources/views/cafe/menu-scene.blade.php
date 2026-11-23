@@ -38,6 +38,9 @@
                 <p class="mt-1 text-xs text-stone-500">{{ $stageCopy['price_note'] }}</p>
 
                 <div class="mt-5 flex flex-wrap gap-3">
+                    @if ($menuItem->category === \App\Models\MenuItem::CATEGORY_COFFEE && $menuItem->is_active && ! $menuItem->is_sold_out)
+                        <a href="{{ route('coffee-orders.create', ['cafeSlug' => $cafe->slug, 'menu_item_id' => $menuItem->id, 'lang' => $locale]) }}" class="stage-action">{{ __('coffee.title') }} <span aria-hidden="true">→</span></a>
+                    @endif
                     <button type="button" class="stage-action" data-hero-quick-message="{{ str_replace(':name', $itemName, $stageCopy['ask_item_q']) }}">{{ $stageCopy['ask_item'] }} <span aria-hidden="true">↗</span></button>
                     <a href="{{ route('cafe.reservation', ['cafeSlug' => $cafe->slug, 'lang' => $locale]) }}" data-stage-exit data-tour-line="{{ $narration['tour_reservation'] }}" class="detail-scene-step">{{ $stageCopy['reserve_table'] }}</a>
                 </div>

@@ -1,0 +1,103 @@
+.coffee-machine {
+    position: relative;
+    width: 180px;
+    height: 165px;
+    margin: 24px auto;
+}
+
+.coffee-machine-spout {
+    position: absolute;
+    top: 0;
+    left: 30px;
+    width: 120px;
+    height: 22px;
+    border-radius: 6px;
+    background: var(--ink);
+}
+
+.coffee-cup {
+    position: absolute;
+    bottom: 15px;
+    left: 35px;
+    width: 100px;
+    height: 85px;
+    border: 5px solid var(--terra);
+    border-top-width: 3px;
+    border-radius: 5px 5px 28px 28px;
+    background: var(--paper-soft);
+}
+
+.coffee-cup::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    right: -32px;
+    width: 28px;
+    height: 40px;
+    border: 5px solid var(--terra);
+    border-left: 0;
+    border-radius: 0 20px 20px 0;
+}
+
+.coffee-fill {
+    position: absolute;
+    inset: 8px 4px 4px;
+    border-radius: 0 0 18px 18px;
+    background: var(--ink);
+    transform: scaleY(var(--coffee-progress, 0));
+    transform-origin: bottom;
+    transition: transform .6s ease;
+}
+
+.coffee-stream {
+    display: none;
+    position: absolute;
+    top: 22px;
+    left: 82px;
+    width: 6px;
+    height: 54px;
+    background: var(--terra-deep);
+}
+
+.coffee-machine[data-state='brewing'] .coffee-stream {
+    display: block;
+    animation: coffee-pour .8s ease-in-out infinite alternate;
+}
+
+.coffee-saucer {
+    position: absolute;
+    bottom: 7px;
+    left: 20px;
+    width: 140px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--terra);
+}
+
+.coffee-step {
+    padding: 8px 12px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-control);
+    color: var(--ink-soft);
+}
+
+.coffee-step[aria-current='step'] {
+    border-color: var(--terra);
+    background: var(--terra-soft);
+    color: var(--ink);
+    font-weight: 600;
+}
+
+.coffee-progress {
+    accent-color: var(--terra);
+}
+
+@keyframes coffee-pour {
+    from { opacity: .5; }
+    to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .coffee-machine[data-state='brewing'] .coffee-stream { animation: none; }
+    .coffee-fill { transition: none; }
+}

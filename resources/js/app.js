@@ -8,6 +8,7 @@ import { registerUi } from './ui/register.js';
 import './sound';
 import './barista';
 import './reservation';
+import './coffee-order';
 import './stage';
 import './narrator';
 

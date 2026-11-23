@@ -16,6 +16,21 @@ Satu aplikasi bisa melayani beberapa kafe. Setiap kafe punya halaman sendiri di 
   - Menjawab dalam bahasa yang ditulis tamu.
   - Menampilkan kartu menu, area duduk, dan ketersediaan langsung di dalam chat.
 - **Reservasi meja**: pilih tanggal dan sesi 2 jam, jumlah tamu, area duduk, lalu kirim permintaan reservasi (status awal `pending`). Tidak ada pembayaran di muka.
+- **Demo mesin kopi**: pilih kopi, konfirmasi satu cangkir, lalu pantau antrean dan animasi pembuatan sampai siap diambil. Pesanan tersimpan terpisah dari reservasi dan hanya dapat diakses melalui sesi pemesan.
+
+### Simulator mesin kopi
+
+Pada instalasi yang sudah ada, jalankan `php artisan migrate` untuk menambahkan tabel pesanan dan `npm run build` untuk memperbarui aset (atau gunakan Vite saat development). Buka detail menu kategori kopi yang aktif dan tersedia, lalu pilih **Pesan kopi**. Tautan **Lihat pesanan terakhir** tersedia pada navigasi menu setelah memesan.
+
+Setiap kafe memiliki satu mesin simulasi. Pesanan masuk antrean secara atomik; mesin yang sedang kosong memiliki jeda pengiriman sekitar 3 detik, kemudian setiap cangkir diproses selama 30 detik. Halaman memperbarui status setiap 3 detik, mencoba kembali ketika koneksi gagal, dan berhenti ketika siap. Waktu proses disimpan di server sehingga memuat ulang atau menutup halaman tidak mengulang antrean. Simulator tidak memerlukan queue worker; status tersimpan diselaraskan ketika halaman pelacakan atau endpoint status dibaca.
+
+Antarmuka HTTP di bawah `/{cafeSlug}/orders`:
+
+- `GET /create?menu_item_id=...`: ringkasan dan form konfirmasi.
+- `POST /`: membuat satu pesanan dengan `menu_item_id` dan UUID `request_key`; pengulangan kunci pada sesi dan kafe yang sama mengembalikan pesanan semula. Harga selalu dibaca dari menu di server. Form diarahkan ke halaman pelacakan; permintaan JSON memperoleh snapshot dan `tracking_url`.
+- `GET /{reference}` dan `GET /{reference}/status`: halaman pelacakan dan snapshot JSON, keduanya dibatasi ke sesi pemesan serta kafe terkait. Status: `queued`, `brewing`, `ready`.
+
+Seluruh proses ditandai sebagai **Simulasi mesin kopi**: belum ada pembayaran, video, kustomisasi resep, pesanan lewat AI barista, atau perintah ke perangkat fisik. Logika penjadwalan dan progres ada di `app/Modules/Coffee/Support/CoffeeMachineSimulator.php`; integrasi perangkat perlu menggantikan perilaku berbasis waktu dengan informasi mesin aktual.
 
 ### Sisi admin (`/admin`)
 - Dashboard ringkasan.

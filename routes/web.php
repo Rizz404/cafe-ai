@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\BaristaChatController;
 use App\Http\Controllers\Api\ReservationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CafePageController;
+use App\Http\Controllers\CoffeeOrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [CafePageController::class, 'index'])->name('home');
@@ -49,6 +50,13 @@ Route::prefix('{cafeSlug}')->middleware('cafe')->group(function () {
     Route::get('info', [CafePageController::class, 'info'])->name('cafe.info');
     Route::get('staff', [CafePageController::class, 'staff'])->name('cafe.staff');
     Route::get('reservation', [CafePageController::class, 'reservationScene'])->name('cafe.reservation');
+
+    Route::prefix('orders')->name('coffee-orders.')->group(function () {
+        Route::get('create', [CoffeeOrderController::class, 'create'])->name('create');
+        Route::post('/', [CoffeeOrderController::class, 'store'])->middleware('throttle:20,1')->name('store');
+        Route::get('{reference}', [CoffeeOrderController::class, 'show'])->whereUuid('reference')->name('show');
+        Route::get('{reference}/status', [CoffeeOrderController::class, 'status'])->whereUuid('reference')->name('status');
+    });
 
     Route::prefix('reservation')->name('reservation.')->middleware('throttle:20,1')->group(function () {
         Route::post('quote', [ReservationController::class, 'quote'])->name('quote');
