@@ -55,3 +55,16 @@ test('getJson puts the query in the URL', async () => {
 
     assert.equal(requested, '/demo/barista/history?guest_token=abc');
 });
+
+test('getJson supports an optional timeout without changing existing callers', async () => {
+    let signal;
+    stubBrowser(async (url, init) => {
+        signal = init.signal;
+        return { ok: true, status: 200, json: async () => ({ status: 'brewing' }) };
+    });
+
+    await getJson('/demo/orders/test/status', {}, { timeoutMs: 10000 });
+
+    assert.ok(signal instanceof AbortSignal);
+    assert.equal(signal.aborted, false);
+});

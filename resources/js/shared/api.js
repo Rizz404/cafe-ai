@@ -42,12 +42,14 @@ export async function postJson(url, payload = {}, { timeoutMs = null } = {}) {
 /**
  * @param {string} url
  * @param {Record<string, string>} [query]
+ * @param {{ timeoutMs?: number }} [options]
  * @returns {Promise<{ ok: boolean, status: number, body: any }>}
  */
-export async function getJson(url, query = {}) {
+export async function getJson(url, query = {}, { timeoutMs = null } = {}) {
     const search = new URLSearchParams(query).toString();
     const response = await fetch(search ? `${url}?${search}` : url, {
         headers: { Accept: 'application/json' },
+        ...(timeoutMs ? { signal: AbortSignal.timeout(timeoutMs) } : {}),
     });
 
     return { ok: response.ok, status: response.status, body: await response.json().catch(() => ({})) };
